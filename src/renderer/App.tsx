@@ -1,18 +1,49 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import TimerDisplay from './components/TimerDisplay';
+import ReminderModal, { EXERCISES } from './components/ReminderModal';
+import SettingsPage from './pages/SettingsPage';
+import { createSettingsStore } from './store/settingsStore';
 import { TimerService } from '../main/timer';
 
 const timerService = new TimerService();
+const settingsStore = createSettingsStore();
+
+type View = 'timer' | 'settings';
 
 function App() {
+  const [currentView, setCurrentView] = useState<View>('timer');
   const [remainingTime, setRemainingTime] = useState(timerService.getRemainingTime());
   const [isPaused, setIsPaused] = useState(false);
+  const [showReminder, setShowReminder] = useState(false);
+  const [currentExercise, setCurrentExercise] = useState(EXERCISES[0]);
+  const [settings, setSettings] = useState(settingsStore.getState());
 
+  // Subscribe to settings changes
+  useEffect(() => {
+    const unsubscribe = settingsStore.subscribe((state) => {
+      setSettings({ ...state });
+      // Update timer interval when settings change
+      timerService.setInterval(state.intervalMinutes * 60 * 1000);
+    });
+    return unsubscribe;
+  }, []);
+
+  // Apply dark mode
+  useEffect(() => {
+    if (settings.darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [settings.darkMode]);
+
+  // Timer event handlers
   useEffect(() => {
     const handleTick = (data?: number) => data && setRemainingTime(data);
     const handleComplete = () => {
-      // TODO: Show notification
-      console.log('Timer complete! Time to stretch!');
+      const randomExercise = EXERCISES[Math.floor(Math.random() * EXERCISES.length)];
+      setCurrentExercise(randomExercise);
+      setShowReminder(true);
     };
 
     timerService.on('tick', handleTick);
@@ -24,63 +55,107 @@ function App() {
     };
   }, []);
 
-  const handlePause = () => {
+  const handlePause = useCallback(() => {
     timerService.pause();
     setIsPaused(true);
-  };
+  }, []);
 
-  const handleResume = () => {
+  const handleResume = useCallback(() => {
     timerService.resume();
     setIsPaused(false);
-  };
+  }, []);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     timerService.reset();
     setRemainingTime(timerService.getRemainingTime());
     setIsPaused(false);
-  };
+  }, []);
 
-  const handleStart = () => {
+  const handleStart = useCallback(() => {
     timerService.start();
-  };
+  }, []);
+
+  const handleSnooze = useCallback((minutes: number = 5) => {
+    setShowReminder(false);
+    timerService.setInterval(minutes * 60 * 1000);
+    timerService.reset();
+    timerService.start();
+  }, []);
+
+  const handleSkip = useCallback(() => {
+    setShowReminder(false);
+    timerService.reset();
+    timerService.start();
+  }, []);
+
+  const handleCloseReminder = useCallback(() => {
+    setShowReminder(false);
+  }, []);
+
+  const isTimerRunning = remainingTime < timerService.getInterval() || isPaused;
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary-50 to-accent-50 dark:from-gray-900 dark:to-gray-800">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2">
-            🧘 Stretching Reminder
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Time to take a break and stretch!
-          </p>
-        </div>
-
-        {!isPaused && remainingTime === timerService.getInterval() && !timerService.getRemainingTime() ? (
-          <div className="card text-center">
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Ready to start your focus timer?
-            </p>
-            <button onClick={handleStart} className="btn-primary text-lg px-8 py-3">
-              ▶ Start Timer
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-accent-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+      {currentView === 'timer' ? (
+        <div className="container mx-auto px-4 py-8 max-w-md">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h1 className="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                🧘 Stretching Reminder
+              </h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {settings.enabled ? 'Active' : 'Paused'} • Next break in {Math.ceil(remainingTime / 60000)} min
+              </p>
+            </div>
+            <button
+              onClick={() => setCurrentView('settings')}
+              className="btn-secondary text-sm"
+            >
+              ⚙ Settings
             </button>
           </div>
-        ) : (
-          <TimerDisplay
-            remainingTime={remainingTime}
-            isPaused={isPaused}
-            onPause={handlePause}
-            onResume={handleResume}
-            onReset={handleReset}
-          />
-        )}
 
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-500">
-            Next break in: {Math.floor(remainingTime / 60000)} minutes
-          </p>
+          {/* Timer or Start Button */}
+          {!isTimerRunning ? (
+            <div className="card text-center py-12">
+              <div className="text-6xl mb-4">⏰</div>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                Ready to start your focus timer?
+              </p>
+              <button onClick={handleStart} className="btn-primary text-lg px-8 py-3">
+                ▶ Start Timer
+              </button>
+            </div>
+          ) : (
+            <TimerDisplay
+              remainingTime={remainingTime}
+              isPaused={isPaused}
+              onPause={handlePause}
+              onResume={handleResume}
+              onReset={handleReset}
+            />
+          )}
+
+          {/* Quick Info */}
+          <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-500">
+            <p>Reminder interval: {settings.intervalMinutes} minutes</p>
+            <p>Work hours: {settings.workHoursStart}:00 - {settings.workHoursEnd}:00</p>
+          </div>
         </div>
-      </div>
+      ) : (
+        <SettingsPage onBack={() => setCurrentView('timer')} />
+      )}
+
+      {/* Reminder Modal */}
+      <ReminderModal
+        isOpen={showReminder}
+        message={settings.customMessage}
+        exercise={currentExercise}
+        onSnooze={handleSnooze}
+        onSkip={handleSkip}
+        onClose={handleCloseReminder}
+      />
     </div>
   );
 }
