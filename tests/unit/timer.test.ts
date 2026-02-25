@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { TimerService } from '../main/timer';
+import { TimerService } from '../../src/main/timer';
 
 describe('TimerService', () => {
   let timer: TimerService;

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import TimerDisplay from '../renderer/components/TimerDisplay';
+import TimerDisplay from '../../src/renderer/components/TimerDisplay';
 
 describe('TimerDisplay', () => {
   it('should display remaining time in MM:SS format', () => {

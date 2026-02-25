@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import SettingsPage from '../renderer/pages/SettingsPage';
+import SettingsPage from '../../src/renderer/pages/SettingsPage';
 
 describe('SettingsPage', () => {
   const mockStore = {

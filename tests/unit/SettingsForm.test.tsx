@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import SettingsForm from '../renderer/components/SettingsForm';
+import SettingsForm from '../../src/renderer/components/SettingsForm';
 
 describe('SettingsForm', () => {
   const defaultProps = {

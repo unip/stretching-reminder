@@ -48,7 +48,7 @@ vi.mock('electron', () => {
   };
 });
 
-import { NotificationService } from '../main/notificationService';
+import { NotificationService } from '../../src/main/notificationService';
 
 describe('NotificationService', () => {
   let notificationService: NotificationService;

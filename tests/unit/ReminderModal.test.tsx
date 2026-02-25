@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import ReminderModal from '../renderer/components/ReminderModal';
+import ReminderModal from '../../src/renderer/components/ReminderModal';
 
 describe('ReminderModal', () => {
   const defaultProps = {

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { createSettingsStore } from '../renderer/store/settingsStore';
+import { createSettingsStore } from '../../src/renderer/store/settingsStore';
 
 describe('SettingsStore', () => {
   let store: ReturnType<typeof createSettingsStore>;

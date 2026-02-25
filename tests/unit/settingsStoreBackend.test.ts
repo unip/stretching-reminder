@@ -18,7 +18,7 @@ vi.mock('electron-store', () => ({
   },
 }));
 
-import { SettingsStore } from '../main/settingsStore';
+import { SettingsStore } from '../../src/main/settingsStore';
 
 describe('SettingsStore', () => {
   it('should have getSettings method', () => {
