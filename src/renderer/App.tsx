@@ -5,8 +5,9 @@ import SettingsPage from './pages/SettingsPage';
 import { createSettingsStore } from './store/settingsStore';
 import { TimerService } from '../main/timer';
 
-const timerService = new TimerService();
+// Create shared store once
 const settingsStore = createSettingsStore();
+const timerService = new TimerService();
 
 type View = 'timer' | 'settings';
 
@@ -17,6 +18,7 @@ function App() {
   const [showReminder, setShowReminder] = useState(false);
   const [currentExercise, setCurrentExercise] = useState(EXERCISES[0]);
   const [settings, setSettings] = useState(settingsStore.getState());
+  const [isTimerStarted, setIsTimerStarted] = useState(false);
 
   // Subscribe to settings changes
   useEffect(() => {
@@ -30,6 +32,7 @@ function App() {
 
   // Apply dark mode
   useEffect(() => {
+    console.log('Applying dark mode:', settings.darkMode);
     if (settings.darkMode) {
       document.documentElement.classList.add('dark');
     } else {
@@ -37,13 +40,24 @@ function App() {
     }
   }, [settings.darkMode]);
 
+  // Initialize timer with settings
+  useEffect(() => {
+    timerService.setInterval(settings.intervalMinutes * 60 * 1000);
+    setRemainingTime(timerService.getRemainingTime());
+  }, []);
+
   // Timer event handlers
   useEffect(() => {
-    const handleTick = (data?: number) => data && setRemainingTime(data);
+    const handleTick = (data?: number) => {
+      if (data !== undefined) {
+        setRemainingTime(data);
+      }
+    };
     const handleComplete = () => {
       const randomExercise = EXERCISES[Math.floor(Math.random() * EXERCISES.length)];
       setCurrentExercise(randomExercise);
       setShowReminder(true);
+      setIsTimerStarted(false);
     };
 
     timerService.on('tick', handleTick);
@@ -73,6 +87,7 @@ function App() {
 
   const handleStart = useCallback(() => {
     timerService.start();
+    setIsTimerStarted(true);
   }, []);
 
   const handleSnooze = useCallback((minutes: number = 5) => {
@@ -92,7 +107,7 @@ function App() {
     setShowReminder(false);
   }, []);
 
-  const isTimerRunning = remainingTime < timerService.getInterval() || isPaused;
+  const isTimerRunning = remainingTime < timerService.getInterval() || isPaused || isTimerStarted;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-accent-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
@@ -144,7 +159,7 @@ function App() {
           </div>
         </div>
       ) : (
-        <SettingsPage onBack={() => setCurrentView('timer')} />
+        <SettingsPage onBack={() => setCurrentView('timer')} store={settingsStore} />
       )}
 
       {/* Reminder Modal */}
