@@ -2,6 +2,7 @@
   "name": "stretching-reminder",
   "version": "1.0.0",
   "description": "Desktop app that reminds you to stretch during work hours",
+  "type": "module",
   "main": "dist/main/index.js",
   "scripts": {
     "dev": "vite",
