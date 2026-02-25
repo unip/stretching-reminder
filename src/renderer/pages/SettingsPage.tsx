@@ -9,16 +9,23 @@ interface SettingsPageProps {
 
 export default function SettingsPage({ onBack, store: propStore }: SettingsPageProps) {
   const internalStore = propStore ?? createSettingsStore();
-  const [, setSettings] = useState(internalStore.getState());
+  
+  // Use a trigger to force re-render when store changes
+  const [, setTick] = useState(0);
+  const state = internalStore.getState();
 
   useEffect(() => {
-    const unsubscribe = internalStore.subscribe((state) => {
-      setSettings({ ...state });
+    const unsubscribe = internalStore.subscribe(() => {
+      setTick(t => t + 1);
     });
     return unsubscribe;
   }, [internalStore]);
 
-  const state = internalStore.getState();
+  const handleSave = () => {
+    // Settings are already saved to store via the form handlers
+    // This is just a callback for any additional actions
+    console.log('Settings saved');
+  };
 
   return (
     <div className="min-h-screen p-4 bg-gradient-to-br from-primary-50 to-accent-50 dark:from-gray-900 dark:to-gray-800">
@@ -46,9 +53,10 @@ export default function SettingsPage({ onBack, store: propStore }: SettingsPageP
             customMessage={state.customMessage}
             setIntervalMinutes={state.setIntervalMinutes}
             setWorkHours={state.setWorkHours}
-            toggleEnabled={state.toggleEnabled}
-            toggleDarkMode={state.toggleDarkMode}
+            setEnabled={state.setEnabled}
+            setDarkMode={state.setDarkMode}
             setCustomMessage={state.setCustomMessage}
+            onSave={handleSave}
           />
         </div>
 

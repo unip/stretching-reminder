@@ -12,8 +12,8 @@ export interface SettingsState {
   // Actions
   setIntervalMinutes: (minutes: number) => void;
   setWorkHours: (start: number, end: number) => void;
-  toggleEnabled: () => void;
-  toggleDarkMode: () => void;
+  setEnabled: (enabled: boolean) => void;
+  setDarkMode: (darkMode: boolean) => void;
   setCustomMessage: (message: string) => void;
   resetToDefaults: () => void;
 }
@@ -35,28 +35,69 @@ const DEFAULT_SETTINGS: Pick<
   customMessage: 'Time to stretch!',
 };
 
+const STORAGE_KEY = 'stretching-reminder-settings';
+
+// Load settings from localStorage
+function loadSettings(): Partial<SettingsState> {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error('Failed to load settings:', e);
+  }
+  return {};
+}
+
+// Save settings to localStorage
+function saveSettings(settings: Partial<SettingsState>) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  } catch (e) {
+    console.error('Failed to save settings:', e);
+  }
+}
+
 export function createSettingsStore() {
-  return create<SettingsState>((set, get) => ({
-    ...DEFAULT_SETTINGS,
+  const saved = loadSettings();
+  const initialState = { ...DEFAULT_SETTINGS, ...saved };
+
+  return create<SettingsState>((set) => ({
+    ...initialState,
 
     setIntervalMinutes: (minutes: number) => {
       const validMinutes = Math.max(1, minutes);
       set({ intervalMinutes: validMinutes });
+      saveSettings({ intervalMinutes: validMinutes });
     },
 
     setWorkHours: (start: number, end: number) => {
       const validStart = Math.max(0, Math.min(23, start));
       const validEnd = Math.max(0, Math.min(23, end));
       set({ workHoursStart: validStart, workHoursEnd: validEnd });
+      saveSettings({ workHoursStart: validStart, workHoursEnd: validEnd });
     },
 
-    toggleEnabled: () => set({ enabled: !get().enabled }),
+    setEnabled: (enabled: boolean) => {
+      set({ enabled });
+      saveSettings({ enabled });
+    },
 
-    toggleDarkMode: () => set({ darkMode: !get().darkMode }),
+    setDarkMode: (darkMode: boolean) => {
+      set({ darkMode });
+      saveSettings({ darkMode });
+    },
 
-    setCustomMessage: (message: string) => set({ customMessage: message }),
+    setCustomMessage: (message: string) => {
+      set({ customMessage: message });
+      saveSettings({ customMessage: message });
+    },
 
-    resetToDefaults: () => set(DEFAULT_SETTINGS),
+    resetToDefaults: () => {
+      set(DEFAULT_SETTINGS);
+      saveSettings(DEFAULT_SETTINGS);
+    },
   }));
 }
 

@@ -30,16 +30,16 @@ describe('SettingsStore', () => {
     expect(store.getState().workHoursEnd).toBe(18);
   });
 
-  it('should toggle enabled state', () => {
-    store.getState().toggleEnabled();
+  it('should update enabled state', () => {
+    store.getState().setEnabled(false);
     expect(store.getState().enabled).toBe(false);
     
-    store.getState().toggleEnabled();
+    store.getState().setEnabled(true);
     expect(store.getState().enabled).toBe(true);
   });
 
-  it('should toggle dark mode', () => {
-    store.getState().toggleDarkMode();
+  it('should update dark mode', () => {
+    store.getState().setDarkMode(true);
     expect(store.getState().darkMode).toBe(true);
   });
 
@@ -50,7 +50,7 @@ describe('SettingsStore', () => {
 
   it('should reset to default settings', () => {
     store.getState().setIntervalMinutes(60);
-    store.getState().toggleDarkMode();
+    store.getState().setDarkMode(true);
     store.getState().setCustomMessage('Custom');
     
     store.getState().resetToDefaults();
