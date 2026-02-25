@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import SettingsForm from '../components/SettingsForm';
 import { createSettingsStore } from '../store/settingsStore';
 
@@ -8,7 +8,8 @@ interface SettingsPageProps {
 }
 
 export default function SettingsPage({ onBack, store: propStore }: SettingsPageProps) {
-  const internalStore = propStore ?? createSettingsStore();
+  // Create store once or use provided store
+  const internalStore = useMemo(() => propStore ?? createSettingsStore(), [propStore]);
   
   // Use a trigger to force re-render when store changes
   const [, setTick] = useState(0);
@@ -21,11 +22,13 @@ export default function SettingsPage({ onBack, store: propStore }: SettingsPageP
     return unsubscribe;
   }, [internalStore]);
 
-  const handleSave = () => {
-    // Settings are already saved to store via the form handlers
-    // This is just a callback for any additional actions
+  const handleSave = useCallback(() => {
     console.log('Settings saved');
-  };
+  }, []);
+
+  const handleReset = useCallback(() => {
+    internalStore.getState().resetToDefaults();
+  }, [internalStore]);
 
   return (
     <div className="min-h-screen p-4 bg-gradient-to-br from-primary-50 to-accent-50 dark:from-gray-900 dark:to-gray-800">
@@ -51,18 +54,18 @@ export default function SettingsPage({ onBack, store: propStore }: SettingsPageP
             enabled={state.enabled}
             darkMode={state.darkMode}
             customMessage={state.customMessage}
-            setIntervalMinutes={state.setIntervalMinutes}
-            setWorkHours={state.setWorkHours}
-            setEnabled={state.setEnabled}
-            setDarkMode={state.setDarkMode}
-            setCustomMessage={state.setCustomMessage}
+            setIntervalMinutes={internalStore.getState().setIntervalMinutes}
+            setWorkHours={internalStore.getState().setWorkHours}
+            setEnabled={internalStore.getState().setEnabled}
+            setDarkMode={internalStore.getState().setDarkMode}
+            setCustomMessage={internalStore.getState().setCustomMessage}
             onSave={handleSave}
           />
         </div>
 
         {/* Reset Button */}
         <button
-          onClick={() => state.resetToDefaults()}
+          onClick={handleReset}
           className="btn-secondary w-full mt-4"
         >
           Reset to Defaults
