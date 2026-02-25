@@ -11,19 +11,20 @@ export default function SettingsPage({ onBack, store: propStore }: SettingsPageP
   // Create store once or use provided store
   const internalStore = useMemo(() => propStore ?? createSettingsStore(), [propStore]);
   
-  // Use a trigger to force re-render when store changes
-  const [, setTick] = useState(0);
-  const state = internalStore.getState();
+  // Get current state
+  const [state, setState] = useState(internalStore.getState());
 
   useEffect(() => {
-    const unsubscribe = internalStore.subscribe(() => {
-      setTick(t => t + 1);
+    const unsubscribe = internalStore.subscribe((newState) => {
+      setState({ ...newState });
     });
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+    };
   }, [internalStore]);
 
   const handleSave = useCallback(() => {
-    console.log('Settings saved');
+    // Settings are saved automatically when form values change
   }, []);
 
   const handleReset = useCallback(() => {

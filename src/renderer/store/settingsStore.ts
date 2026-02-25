@@ -50,53 +50,44 @@ function loadSettings(): Partial<SettingsState> {
   return {};
 }
 
-// Save settings to localStorage
-function saveSettings(settings: Partial<SettingsState>) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-  } catch (e) {
-    console.error('Failed to save settings:', e);
-  }
-}
-
 export function createSettingsStore() {
   const saved = loadSettings();
   const initialState = { ...DEFAULT_SETTINGS, ...saved };
 
-  return create<SettingsState>((set) => ({
+  return create<SettingsState>((set, get) => ({
     ...initialState,
 
     setIntervalMinutes: (minutes: number) => {
       const validMinutes = Math.max(1, minutes);
       set({ intervalMinutes: validMinutes });
-      saveSettings({ intervalMinutes: validMinutes });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(get()));
     },
 
     setWorkHours: (start: number, end: number) => {
       const validStart = Math.max(0, Math.min(23, start));
       const validEnd = Math.max(0, Math.min(23, end));
       set({ workHoursStart: validStart, workHoursEnd: validEnd });
-      saveSettings({ workHoursStart: validStart, workHoursEnd: validEnd });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(get()));
     },
 
     setEnabled: (enabled: boolean) => {
       set({ enabled });
-      saveSettings({ enabled });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(get()));
     },
 
     setDarkMode: (darkMode: boolean) => {
       set({ darkMode });
-      saveSettings({ darkMode });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(get()));
     },
 
     setCustomMessage: (message: string) => {
       set({ customMessage: message });
-      saveSettings({ customMessage: message });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(get()));
     },
 
     resetToDefaults: () => {
       set(DEFAULT_SETTINGS);
-      saveSettings(DEFAULT_SETTINGS);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(get()));
     },
   }));
 }
