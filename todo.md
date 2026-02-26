@@ -117,26 +117,27 @@ Last updated: February 26, 2026
 
 ---
 
-### Stretch Exercise Library
-- [ ] Write test: Exercise library contains all exercises
-- [ ] Write test: Exercises rotate without immediate repeats
-- [ ] Implement exercise data structure
-- [ ] Add exercise descriptions/instructions
-- [ ] Add exercise illustrations (optional)
-- [ ] Implement smart rotation algorithm
+### Stretch Exercise Library ✅
+- [x] Write test: Exercise library contains all exercises
+- [x] Write test: Exercises rotate without immediate repeats
+- [x] Implement exercise data structure
+- [x] Add exercise descriptions/instructions
+- [x] Implement smart rotation algorithm
 
-**Current Status:** Random exercise from small array
-**Needed:** Full library, no repeats, better variety
+**Features Implemented:**
+- [x] 24 exercises across 8 categories
+- [x] No immediate repeats (tracks last exercise)
+- [x] Category variation preference
+- [x] Detailed step-by-step instructions
+- [x] Category badges and duration display
+- [x] Expandable instructions in modal
+- [x] Difficulty filtering support
 
-**Exercises to Add:**
-- Neck stretches
-- Shoulder rolls
-- Arm stretches
-- Wrist stretches
-- Back stretches
-- Leg stretches
-- Seated twists
-- Standing stretches
+**Exercise Categories:**
+- Neck, Shoulders, Arms, Wrists (upper body)
+- Back (core)
+- Legs (lower body)
+- Seated, Standing (position-based)
 
 ---
 
@@ -457,6 +458,6 @@ npm run typecheck    # TypeScript type check
 ## Next Recommended Steps
 
 1. **Window Customization** - Custom title bar with themed controls
-2. **Stretch Exercise Library** - Expand exercise variety
-3. **Snooze Options UI** - 5/10/15 minute selection
-4. **Custom Messages Display** - Show in reminder modal
+2. **Snooze Options UI** - 5/10/15 minute selection dropdown in modal
+3. **Custom Messages Display** - Show in reminder modal
+4. **Enabled/Disabled Toggle** - Quick enable/disable from settings
