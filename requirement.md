@@ -91,6 +91,8 @@ Each feature follows **Red → Green → Refactor** cycle:
 - Enabled/disabled toggle
 - Custom messages
 - Dark mode preference
+- Sound notification toggle
+- Custom window title
 
 #### 2.4 System Tray
 **TDD Cycle:**
@@ -172,6 +174,24 @@ Each feature follows **Red → Green → Refactor** cycle:
 - Snooze (5, 10, 15 min options)
 - Skip break
 - Playful animations
+- Sound notification on reminder
+- Customizable sound selection
+
+---
+
+#### 3.6 Window Customization
+**TDD Cycle:**
+- [ ] Write test: Custom window title displays correctly
+- [ ] Write test: Custom close/minimize buttons match theme
+- [ ] Implement custom title bar component
+- [ ] Add theme-aware button styling
+- [ ] Refactor for reusability
+
+**Features:**
+- Custom window title (configurable)
+- Themed close/minimize buttons
+- Dark/light mode support
+- Consistent with app branding
 
 #### 3.5 State Management (Zustand)
 **TDD Cycle:**

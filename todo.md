@@ -66,6 +66,42 @@ Last updated: February 26, 2026
 
 ## 🟡 MEDIUM PRIORITY - UX Improvements
 
+### Sound Notification
+- [ ] Write test: Sound plays on reminder
+- [ ] Write test: Sound can be enabled/disabled
+- [ ] Write test: Custom sound selection works
+- [ ] Implement sound player service
+- [ ] Add sound toggle to settings
+- [ ] Add sound selection dropdown (optional)
+- [ ] Persist sound preference
+
+**Features:**
+- Play sound when reminder appears
+- Enable/disable in settings
+- Default gentle alert sound
+- Optional: Multiple sound options
+- Volume control (optional)
+
+---
+
+### Window Customization
+- [ ] Write test: Custom title displays in header
+- [ ] Write test: Custom buttons respond to clicks
+- [ ] Write test: Buttons match dark/light theme
+- [ ] Implement custom title bar component
+- [ ] Style minimize/close buttons with Tailwind
+- [ ] Add custom title setting to settings page
+- [ ] Make buttons theme-aware (dark/light mode)
+
+**Features:**
+- Custom app title in window header
+- Themed window control buttons
+- Consistent with primary/accent colors
+- Dark mode support
+- Frameless window option (optional)
+
+---
+
 ### Progress Indicator
 - [ ] Write test: Progress ring displays correctly
 - [ ] Write test: Progress updates every second
@@ -265,8 +301,9 @@ Last updated: February 26, 2026
 - [x] Work hours (start/end)
 - [x] Dark mode preference
 - [x] Custom messages
+- [x] Auto-launch toggle
 
-**Note:** Enabled/disabled toggle pending
+**Note:** Sound notification and custom window title pending (see Medium Priority)
 
 #### System Tray ✅
 - [x] Implement tray with context menu
@@ -419,7 +456,7 @@ npm run typecheck    # TypeScript type check
 
 ## Next Recommended Steps
 
-1. **Work Hours Enforcement** - Core functionality that's currently missing
-2. **Auto-Launch** - High user convenience feature
-3. **Notification Actions** - Complete native notification integration
-4. **Progress Indicator** - Visual polish for timer display
+1. **Sound Notification** - Add audio feedback for reminders
+2. **Window Customization** - Custom title bar with themed controls
+3. **Progress Indicator** - Visual polish for timer display
+4. **Stretch Exercise Library** - Expand exercise variety
