@@ -6,17 +6,18 @@ Last updated: February 26, 2026
 
 ## 🔴 HIGH PRIORITY - Core Features
 
-### Auto-Launch
-- [ ] Write test: Enable adds to startup
-- [ ] Write test: Disable removes from startup
-- [ ] Implement auto-launch wrapper (use `auto-launch` package)
-- [ ] Add settings toggle for auto-launch
-- [ ] Refactor for cross-platform support
+### Auto-Launch ✅
+- [x] Write test: Enable adds to startup
+- [x] Write test: Disable removes from startup
+- [x] Implement auto-launch wrapper (use `auto-launch` package)
+- [x] Add settings toggle for auto-launch
+- [x] Cross-platform support (Windows, macOS, Linux)
 
-**Features:**
-- Start app on system login
-- Enable/disable in settings
-- Cross-platform (Windows, macOS, Linux)
+**Features Implemented:**
+- [x] Start app on system login
+- [x] Enable/disable in settings
+- [x] AutoLaunchService class with enable/disable/toggle/check methods
+- [x] Settings persistence for auto-launch preference
 
 ---
 
