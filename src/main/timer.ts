@@ -7,10 +7,39 @@ export class TimerService {
   private timerId: NodeJS.Timeout | null = null;
   private isRunning: boolean = false;
   private listeners: Map<string, TimerCallback[]> = new Map();
+  private workHoursStart: number = 9;
+  private workHoursEnd: number = 17;
 
   constructor() {
     this.listeners.set('tick', []);
     this.listeners.set('complete', []);
+  }
+
+  /**
+   * Check if current hour is within work hours
+   * @param workStart - Work start hour (0-23)
+   * @param workEnd - Work end hour (0-23)
+   * @param currentHour - Current hour (0-23), defaults to now
+   */
+  static isWithinWorkHours(workStart: number, workEnd: number, currentHour?: number): boolean {
+    const hour = currentHour ?? new Date().getHours();
+    
+    // Handle overnight work hours (e.g., 22:00 - 06:00)
+    if (workStart > workEnd) {
+      return hour >= workStart || hour < workEnd;
+    }
+    
+    // Normal work hours (e.g., 09:00 - 17:00)
+    return hour >= workStart && hour < workEnd;
+  }
+
+  setWorkHours(start: number, end: number): void {
+    this.workHoursStart = start;
+    this.workHoursEnd = end;
+  }
+
+  isWithinWorkHours(): boolean {
+    return TimerService.isWithinWorkHours(this.workHoursStart, this.workHoursEnd);
   }
 
   on(event: TimerEvent, callback: TimerCallback): void {

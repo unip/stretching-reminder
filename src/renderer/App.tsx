@@ -19,6 +19,7 @@ function App() {
   const [currentExercise, setCurrentExercise] = useState(EXERCISES[0]);
   const [settings, setSettings] = useState(settingsStore.getState());
   const [isTimerStarted, setIsTimerStarted] = useState(false);
+  const [isWithinWorkHours, setIsWithinWorkHours] = useState(true);
 
   // Subscribe to settings changes
   useEffect(() => {
@@ -27,6 +28,19 @@ function App() {
       // Update timer interval when settings change
       timerService.setInterval(state.intervalMinutes * 60 * 1000);
     });
+    return unsubscribe;
+  }, []);
+
+  // Listen for work hours changes from main process
+  useEffect(() => {
+    const unsubscribe = () => {
+      window.electron?.onWorkHoursChanged(() => {});
+    };
+    
+    window.electron?.onWorkHoursChanged((state) => {
+      setIsWithinWorkHours(state.isWithinWorkHours);
+    });
+
     return unsubscribe;
   }, []);
 
@@ -120,7 +134,7 @@ function App() {
                 🧘 Stretching Reminder
               </h1>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                {settings.enabled ? 'Active' : 'Paused'} • Next break in {Math.ceil(remainingTime / 60000)} min
+                {isWithinWorkHours ? (settings.enabled ? 'Active' : 'Paused') : 'Outside work hours'} • Next break in {Math.ceil(remainingTime / 60000)} min
               </p>
             </div>
             <button

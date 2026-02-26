@@ -11,23 +11,24 @@ export function registerIPCHandlers(
 ): void {
   // Settings handlers
   ipcMain.handle('get-settings', () => settingsStore.getSettings());
-  
+
   ipcMain.handle('set-interval', (_, minutes: number) => {
     settingsStore.setIntervalMinutes(minutes);
   });
-  
+
   ipcMain.handle('set-work-hours', (_, start: number, end: number) => {
     settingsStore.setWorkHours(start, end);
+    timerService.setWorkHours(start, end);
   });
-  
+
   ipcMain.handle('toggle-enabled', () => {
     settingsStore.toggleEnabled();
   });
-  
+
   ipcMain.handle('toggle-dark-mode', () => {
     settingsStore.toggleDarkMode();
   });
-  
+
   ipcMain.handle('set-custom-message', (_, message: string) => {
     settingsStore.setCustomMessage(message);
   });
@@ -36,22 +37,27 @@ export function registerIPCHandlers(
   ipcMain.handle('start-timer', () => {
     timerService.start();
   });
-  
+
   ipcMain.handle('pause-timer', () => {
     timerService.pause();
   });
-  
+
   ipcMain.handle('resume-timer', () => {
     timerService.resume();
   });
-  
+
   ipcMain.handle('reset-timer', () => {
     timerService.reset();
   });
-  
+
   ipcMain.handle('get-timer-state', () => ({
     remainingTime: timerService.getRemainingTime(),
     interval: timerService.getInterval(),
+    isWithinWorkHours: timerService.isWithinWorkHours(),
+  }));
+
+  ipcMain.handle('check-work-hours', () => ({
+    isWithinWorkHours: timerService.isWithinWorkHours(),
   }));
 
   // Notification handlers

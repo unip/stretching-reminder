@@ -25,9 +25,11 @@ export interface IElectronAPI {
   pauseTimer: () => Promise<void>;
   resumeTimer: () => Promise<void>;
   resetTimer: () => Promise<void>;
-  getTimerState: () => Promise<{ remainingTime: number; interval: number }>;
+  getTimerState: () => Promise<{ remainingTime: number; interval: number; isWithinWorkHours: boolean }>;
+  checkWorkHours: () => Promise<{ isWithinWorkHours: boolean }>;
   onTimerTick: (callback: (remainingTime: number) => void) => void;
   onTimerComplete: (callback: () => void) => void;
+  onWorkHoursChanged: (callback: (state: { isWithinWorkHours: boolean }) => void) => void;
   
   // Notifications
   showNotification: (title: string, body: string) => Promise<void>;

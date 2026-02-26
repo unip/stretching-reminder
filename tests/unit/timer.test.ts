@@ -1,6 +1,43 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { TimerService } from '../../src/main/timer';
 
+describe('isWithinWorkHours', () => {
+  it('should return true when current hour is within work hours', () => {
+    const result = TimerService.isWithinWorkHours(9, 17, 10);
+    expect(result).toBe(true);
+  });
+
+  it('should return false when current hour is before work hours', () => {
+    const result = TimerService.isWithinWorkHours(9, 17, 8);
+    expect(result).toBe(false);
+  });
+
+  it('should return false when current hour is after work hours', () => {
+    const result = TimerService.isWithinWorkHours(9, 17, 18);
+    expect(result).toBe(false);
+  });
+
+  it('should return true when current hour equals start hour', () => {
+    const result = TimerService.isWithinWorkHours(9, 17, 9);
+    expect(result).toBe(true);
+  });
+
+  it('should return false when current hour equals end hour', () => {
+    const result = TimerService.isWithinWorkHours(9, 17, 17);
+    expect(result).toBe(false);
+  });
+
+  it('should handle overnight work hours (e.g., night shift)', () => {
+    const result = TimerService.isWithinWorkHours(22, 6, 23);
+    expect(result).toBe(true);
+  });
+
+  it('should return false for overnight work hours when outside range', () => {
+    const result = TimerService.isWithinWorkHours(22, 6, 10);
+    expect(result).toBe(false);
+  });
+});
+
 describe('TimerService', () => {
   let timer: TimerService;
 
@@ -84,5 +121,17 @@ describe('TimerService', () => {
     vi.advanceTimersByTime(3000);
 
     expect(timer.getRemainingTime()).toBe(7000);
+  });
+
+  it('should track work hours state', () => {
+    timer.setWorkHours(9, 17);
+    expect(timer.isWithinWorkHours()).toBe(true);
+  });
+
+  it('should return false when outside work hours', () => {
+    timer.setWorkHours(9, 17);
+    // Simulate being outside work hours by passing a specific hour
+    expect(TimerService.isWithinWorkHours(9, 17, 8)).toBe(false);
+    expect(TimerService.isWithinWorkHours(9, 17, 18)).toBe(false);
   });
 });

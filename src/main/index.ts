@@ -73,6 +73,10 @@ function initializeServices() {
   timerService = new TimerService();
   trayService = new TrayService();
 
+  // Initialize timer with work hours from settings
+  const settings = settingsStore.getSettings();
+  timerService.setWorkHours(settings.workHoursStart, settings.workHoursEnd);
+
   trayService.create(
     () => {
       if (timerService) {
@@ -94,13 +98,43 @@ function initializeServices() {
     }
   );
 
+  // Update tray tooltip on timer tick
   timerService.on('tick', (remainingTime) => {
     if (remainingTime) {
       const minutes = Math.ceil(remainingTime / 60000);
-      trayService?.setToolTip(`Next break in ${minutes} min`);
+      const isWithinHours = timerService?.isWithinWorkHours();
+      if (isWithinHours) {
+        trayService?.setToolTip(`Next break in ${minutes} min`);
+      } else {
+        trayService?.setToolTip('Outside work hours - timer paused');
+      }
     }
   });
-  
+
+  // Check work hours every minute and auto-pause/resume timer
+  setInterval(() => {
+    if (timerService && settingsStore) {
+      const settings = settingsStore.getSettings();
+      const isWithinHours = TimerService.isWithinWorkHours(
+        settings.workHoursStart,
+        settings.workHoursEnd
+      );
+      
+      if (!isWithinHours && timerService.getRemainingTime() < timerService.getInterval()) {
+        // Timer was running but now outside work hours - pause it
+        timerService.pause();
+        trayService?.setToolTip('Outside work hours - timer paused');
+        mainWindow?.webContents.send('work-hours-changed', { isWithinWorkHours: false });
+      } else if (isWithinHours && !timerService.getRemainingTime()) {
+        // Back within work hours and timer is at zero - reset and start
+        timerService.reset();
+        timerService.start();
+        trayService?.setToolTip(`Next break in ${settings.intervalMinutes} min`);
+        mainWindow?.webContents.send('work-hours-changed', { isWithinWorkHours: true });
+      }
+    }
+  }, 60000);
+
   console.log('Services initialized');
 }
 

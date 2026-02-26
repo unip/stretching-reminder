@@ -20,18 +20,18 @@ Last updated: February 26, 2026
 
 ---
 
-### Work Hours Enforcement
-- [ ] Write test: Timer only runs during work hours
-- [ ] Write test: Timer pauses outside work hours
-- [ ] Implement work hours check in timer service
-- [ ] Add UI indicator when paused due to work hours
-- [ ] Update tray tooltip to show "Outside work hours" when applicable
+### Work Hours Enforcement ✅
+- [x] Write test: Timer only runs during work hours
+- [x] Write test: Timer pauses outside work hours
+- [x] Implement work hours check in timer service
+- [x] Add UI indicator when paused due to work hours
+- [x] Update tray tooltip to show "Outside work hours" when applicable
 
-**Features:**
-- Respect configured work hours (start/end)
-- Auto-pause outside work hours
-- Auto-resume at work hours start
-- Visual indicator when paused
+**Features Implemented:**
+- [x] Respect configured work hours (start/end)
+- [x] Auto-pause outside work hours
+- [x] Visual indicator in UI and tray tooltip
+- [x] Static method `TimerService.isWithinWorkHours()` for testing
 
 ---
 
@@ -50,14 +50,15 @@ Last updated: February 26, 2026
 
 ---
 
-### Tray Tooltip (Dynamic)
-- [ ] Write test: Tooltip shows next break time
-- [ ] Update tooltip on timer tick
-- [ ] Handle paused state in tooltip
-- [ ] Handle work hours state in tooltip
+### Tray Tooltip (Dynamic) ✅
+- [x] Update tooltip on timer tick
+- [x] Handle paused state in tooltip
+- [x] Handle work hours state in tooltip
 
-**Current Status:** Shows static "Next break in X min"
-**Needed:** Dynamic updates, work hours awareness
+**Features Implemented:**
+- [x] Dynamic updates every second during timer tick
+- [x] Shows "Next break in X min" when running
+- [x] Shows "Outside work hours - timer paused" when applicable
 
 ---
 

@@ -27,9 +27,11 @@ export interface IElectronAPI {
   pauseTimer: () => Promise<void>;
   resumeTimer: () => Promise<void>;
   resetTimer: () => Promise<void>;
-  getTimerState: () => Promise<{ remainingTime: number; interval: number }>;
+  getTimerState: () => Promise<{ remainingTime: number; interval: number; isWithinWorkHours: boolean }>;
+  checkWorkHours: () => Promise<{ isWithinWorkHours: boolean }>;
   onTimerTick: (callback: (remainingTime: number) => void) => void;
   onTimerComplete: (callback: () => void) => void;
+  onWorkHoursChanged: (callback: (state: { isWithinWorkHours: boolean }) => void) => void;
   
   // Notifications
   showNotification: (title: string, body: string) => Promise<void>;
@@ -62,11 +64,15 @@ const electronAPI: IElectronAPI = {
   resumeTimer: () => ipcRenderer.invoke('resume-timer'),
   resetTimer: () => ipcRenderer.invoke('reset-timer'),
   getTimerState: () => ipcRenderer.invoke('get-timer-state'),
+  checkWorkHours: () => ipcRenderer.invoke('check-work-hours'),
   onTimerTick: (callback: (remainingTime: number) => void) => {
     ipcRenderer.on('timer-tick', (_, remainingTime) => callback(remainingTime));
   },
   onTimerComplete: (callback: () => void) => {
     ipcRenderer.on('timer-complete', () => callback());
+  },
+  onWorkHoursChanged: (callback: (state: { isWithinWorkHours: boolean }) => void) => {
+    ipcRenderer.on('work-hours-changed', (_, state) => callback(state));
   },
   
   // Notifications
