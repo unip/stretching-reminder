@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Exercise } from '../data/exerciseLibrary';
 
 interface ReminderModalProps {
@@ -22,6 +22,7 @@ export default function ReminderModal({
 }: ReminderModalProps) {
   const [showSnoozeOptions, setShowSnoozeOptions] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
+  const [selectedSnooze, setSelectedSnooze] = useState<number>(5); // Default 5 min
 
   if (!isOpen) return null;
 
@@ -30,9 +31,32 @@ export default function ReminderModal({
   };
 
   const handleSnoozeSelect = (minutes: number) => {
+    setSelectedSnooze(minutes);
     onSnooze(minutes);
     setShowSnoozeOptions(false);
   };
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (!isOpen) return;
+      
+      // Number keys 1-3 for quick snooze
+      if (showSnoozeOptions) {
+        if (e.key === '1') handleSnoozeSelect(5);
+        if (e.key === '2') handleSnoozeSelect(10);
+        if (e.key === '3') handleSnoozeSelect(15);
+        if (e.key === 'Escape') setShowSnoozeOptions(false);
+      } else {
+        if (e.key === 's' || e.key === 'S') handleSnoozeClick();
+        if (e.key === 'k' || e.key === 'K') onSkip();
+        if (e.key === 'Escape') onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, [isOpen, showSnoozeOptions, onSnooze, onSkip, onClose]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -98,30 +122,68 @@ export default function ReminderModal({
 
         {/* Action Buttons */}
         {!showSnoozeOptions ? (
-          <div className="flex gap-3">
-            <button onClick={handleSnoozeClick} className="btn-secondary flex-1">
-              ⏰ Snooze
-            </button>
-            <button onClick={onSkip} className="btn-secondary flex-1">
-              ⏭ Skip
-            </button>
+          <div className="space-y-3">
+            <div className="flex gap-3">
+              <button 
+                onClick={handleSnoozeClick} 
+                className="btn-secondary flex-1"
+                title="Press S"
+              >
+                ⏰ Snooze
+              </button>
+              <button 
+                onClick={onSkip} 
+                className="btn-secondary flex-1"
+                title="Press K"
+              >
+                ⏭ Skip
+              </button>
+            </div>
+            {/* Quick Snooze Preview */}
+            <p className="text-xs text-center text-gray-500 dark:text-gray-400">
+              Press <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">S</kbd> to snooze for {selectedSnooze} min
+            </p>
           </div>
         ) : (
           <div className="space-y-3">
-            <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-center text-sm font-medium text-gray-700 dark:text-gray-300">
               Remind me in:
             </p>
-            <div className="flex gap-2">
-              <button onClick={() => handleSnoozeSelect(5)} className="btn-secondary flex-1">
-                5 min
+            <div className="grid grid-cols-3 gap-3">
+              <button 
+                onClick={() => handleSnoozeSelect(5)} 
+                className={`btn-secondary flex-1 flex flex-col items-center py-3 ${selectedSnooze === 5 ? 'ring-2 ring-primary-500 bg-primary-50 dark:bg-primary-900' : ''}`}
+                title="Press 1"
+              >
+                <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">5</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">minutes</span>
               </button>
-              <button onClick={() => handleSnoozeSelect(10)} className="btn-secondary flex-1">
-                10 min
+              <button 
+                onClick={() => handleSnoozeSelect(10)} 
+                className={`btn-secondary flex-1 flex flex-col items-center py-3 ${selectedSnooze === 10 ? 'ring-2 ring-primary-500 bg-primary-50 dark:bg-primary-900' : ''}`}
+                title="Press 2"
+              >
+                <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">10</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">minutes</span>
               </button>
-              <button onClick={() => handleSnoozeSelect(15)} className="btn-secondary flex-1">
-                15 min
+              <button 
+                onClick={() => handleSnoozeSelect(15)} 
+                className={`btn-secondary flex-1 flex flex-col items-center py-3 ${selectedSnooze === 15 ? 'ring-2 ring-primary-500 bg-primary-50 dark:bg-primary-900' : ''}`}
+                title="Press 3"
+              >
+                <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">15</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">minutes</span>
               </button>
             </div>
+            <p className="text-xs text-center text-gray-500 dark:text-gray-400">
+              Press <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">1</kbd>, <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">2</kbd>, or <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">3</kbd> to select
+            </p>
+            <button
+              onClick={() => setShowSnoozeOptions(false)}
+              className="w-full text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 mt-2"
+            >
+              Cancel
+            </button>
           </div>
         )}
       </div>

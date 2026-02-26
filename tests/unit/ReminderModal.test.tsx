@@ -48,9 +48,9 @@ describe('ReminderModal', () => {
   it('should show snooze options when snooze button is clicked', () => {
     render(<ReminderModal {...defaultProps} />);
     fireEvent.click(screen.getByRole('button', { name: /snooze/i }));
-    expect(screen.getByRole('button', { name: '5 min' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '10 min' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '15 min' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '5 minutes' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '10 minutes' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '15 minutes' })).toBeInTheDocument();
   });
 
   it('should call onSkip when skip button is clicked', () => {
@@ -63,7 +63,7 @@ describe('ReminderModal', () => {
     const onSnooze = vi.fn();
     render(<ReminderModal {...defaultProps} onSnooze={onSnooze} />);
     fireEvent.click(screen.getByRole('button', { name: /snooze/i }));
-    fireEvent.click(screen.getByRole('button', { name: '10 min' }));
+    fireEvent.click(screen.getByRole('button', { name: '10 minutes' }));
     expect(onSnooze).toHaveBeenCalledWith(10);
   });
 
@@ -89,5 +89,28 @@ describe('ReminderModal', () => {
     };
     render(<ReminderModal {...defaultMsgProps} />);
     expect(screen.queryByText(/custom reminder/i)).not.toBeInTheDocument();
+  });
+
+  it('should show snooze duration options when snooze is clicked', () => {
+    render(<ReminderModal {...defaultProps} />);
+    fireEvent.click(screen.getByRole('button', { name: /snooze/i }));
+    expect(screen.getByText('5')).toBeInTheDocument();
+    expect(screen.getByText('10')).toBeInTheDocument();
+    expect(screen.getByText('15')).toBeInTheDocument();
+  });
+
+  it('should highlight selected snooze duration', () => {
+    render(<ReminderModal {...defaultProps} />);
+    fireEvent.click(screen.getByRole('button', { name: /snooze/i }));
+    const fiveMinButton = screen.getByText('5').closest('button');
+    expect(fiveMinButton).toHaveClass('ring-2', 'ring-primary-500');
+  });
+
+  it('should show keyboard shortcut hints', () => {
+    render(<ReminderModal {...defaultProps} />);
+    // Text is split across elements, check for key parts
+    expect(screen.getByText(/Press/i)).toBeInTheDocument();
+    expect(screen.getByText(/to snooze for/i)).toBeInTheDocument();
+    expect(screen.getByText('S')).toBeInTheDocument();
   });
 });
