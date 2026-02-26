@@ -9,6 +9,7 @@ export interface Settings {
   darkMode: boolean;
   customMessage: string;
   autoLaunch: boolean;
+  soundEnabled: boolean;
 }
 
 const DEFAULT_SETTINGS: Settings = {
@@ -19,6 +20,7 @@ const DEFAULT_SETTINGS: Settings = {
   darkMode: false,
   customMessage: 'Time to stretch!',
   autoLaunch: false,
+  soundEnabled: true,
 };
 
 type SettingsEvent = 'change';
@@ -70,6 +72,11 @@ export class SettingsStore extends EventEmitter {
 
   toggleAutoLaunch(): void {
     this.store.set('autoLaunch', !this.store.get('autoLaunch'));
+    this.emit('change', this.getSettings());
+  }
+
+  toggleSoundEnabled(): void {
+    this.store.set('soundEnabled', !this.store.get('soundEnabled'));
     this.emit('change', this.getSettings());
   }
 

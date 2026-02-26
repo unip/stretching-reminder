@@ -4,10 +4,12 @@ import ReminderModal, { EXERCISES } from './components/ReminderModal';
 import SettingsPage from './pages/SettingsPage';
 import { createSettingsStore } from './store/settingsStore';
 import { TimerService } from '../main/timer';
+import { SoundService } from './services/soundService';
 
 // Create shared store once
 const settingsStore = createSettingsStore();
 const timerService = new TimerService();
+const soundService = new SoundService();
 
 type View = 'timer' | 'settings';
 
@@ -27,6 +29,8 @@ function App() {
       setSettings({ ...state });
       // Update timer interval when settings change
       timerService.setInterval(state.intervalMinutes * 60 * 1000);
+      // Update sound preference
+      soundService.setEnabled(state.soundEnabled !== false); // default to true if not set
     });
     return unsubscribe;
   }, []);
@@ -72,6 +76,8 @@ function App() {
       setCurrentExercise(randomExercise);
       setShowReminder(true);
       setIsTimerStarted(false);
+      // Play notification sound
+      soundService.playNotification();
     };
 
     timerService.on('tick', handleTick);

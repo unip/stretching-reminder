@@ -9,6 +9,7 @@ export interface SettingsState {
   darkMode: boolean;
   customMessage: string;
   autoLaunch: boolean;
+  soundEnabled: boolean;
 
   // Actions
   setIntervalMinutes: (minutes: number) => void;
@@ -17,6 +18,7 @@ export interface SettingsState {
   setDarkMode: (darkMode: boolean) => void;
   setCustomMessage: (message: string) => void;
   setAutoLaunch: (enabled: boolean) => void;
+  setSoundEnabled: (enabled: boolean) => void;
   resetToDefaults: () => void;
 }
 
@@ -29,6 +31,7 @@ const DEFAULT_SETTINGS: Pick<
   | 'darkMode'
   | 'customMessage'
   | 'autoLaunch'
+  | 'soundEnabled'
 > = {
   intervalMinutes: 30,
   workHoursStart: 9,
@@ -37,6 +40,7 @@ const DEFAULT_SETTINGS: Pick<
   darkMode: false,
   customMessage: 'Time to stretch!',
   autoLaunch: false,
+  soundEnabled: true,
 };
 
 const STORAGE_KEY = 'stretching-reminder-settings';
@@ -91,6 +95,11 @@ export function createSettingsStore() {
 
     setAutoLaunch: (enabled: boolean) => {
       set({ autoLaunch: enabled });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(get()));
+    },
+
+    setSoundEnabled: (enabled: boolean) => {
+      set({ soundEnabled: enabled });
       localStorage.setItem(STORAGE_KEY, JSON.stringify(get()));
     },
 

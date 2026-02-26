@@ -125,7 +125,11 @@ describe('TimerService', () => {
 
   it('should track work hours state', () => {
     timer.setWorkHours(9, 17);
+    // Mock current hour to be within work hours (e.g., 10 AM)
+    const originalGetHours = Date.prototype.getHours;
+    Date.prototype.getHours = () => 10;
     expect(timer.isWithinWorkHours()).toBe(true);
+    Date.prototype.getHours = originalGetHours;
   });
 
   it('should return false when outside work hours', () => {

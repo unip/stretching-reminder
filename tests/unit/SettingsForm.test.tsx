@@ -11,12 +11,14 @@ describe('SettingsForm', () => {
     darkMode: false,
     customMessage: 'Time to stretch!',
     autoLaunch: false,
+    soundEnabled: true,
     setIntervalMinutes: vi.fn(),
     setWorkHours: vi.fn(),
     setEnabled: vi.fn(),
     setDarkMode: vi.fn(),
     setCustomMessage: vi.fn(),
     setAutoLaunch: vi.fn(),
+    setSoundEnabled: vi.fn(),
     onSave: vi.fn(),
   };
 

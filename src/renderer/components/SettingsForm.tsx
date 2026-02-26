@@ -8,12 +8,14 @@ interface SettingsFormProps {
   darkMode: boolean;
   customMessage: string;
   autoLaunch: boolean;
+  soundEnabled: boolean;
   setIntervalMinutes: (minutes: number) => void;
   setWorkHours: (start: number, end: number) => void;
   setEnabled: (enabled: boolean) => void;
   setDarkMode: (darkMode: boolean) => void;
   setCustomMessage: (message: string) => void;
   setAutoLaunch: (enabled: boolean) => void;
+  setSoundEnabled: (enabled: boolean) => void;
   onSave: () => void;
 }
 
@@ -25,12 +27,14 @@ export default function SettingsForm({
   darkMode,
   customMessage,
   autoLaunch,
+  soundEnabled,
   setIntervalMinutes,
   setWorkHours,
   setEnabled,
   setDarkMode,
   setCustomMessage,
   setAutoLaunch,
+  setSoundEnabled,
   onSave,
 }: SettingsFormProps) {
   // Local state for inputs to avoid reset on every keystroke
@@ -41,6 +45,7 @@ export default function SettingsForm({
   const [localDarkMode, setLocalDarkMode] = useState(darkMode);
   const [localMessage, setLocalMessage] = useState(customMessage);
   const [localAutoLaunch, setLocalAutoLaunch] = useState(autoLaunch);
+  const [localSoundEnabled, setLocalSoundEnabled] = useState(soundEnabled);
 
   // Track if there are unsaved changes
   const [hasChanges, setHasChanges] = useState(false);
@@ -54,8 +59,9 @@ export default function SettingsForm({
     setLocalDarkMode(darkMode);
     setLocalMessage(customMessage);
     setLocalAutoLaunch(autoLaunch);
+    setLocalSoundEnabled(soundEnabled);
     setHasChanges(false);
-  }, [intervalMinutes, workHoursStart, workHoursEnd, enabled, darkMode, customMessage, autoLaunch]);
+  }, [intervalMinutes, workHoursStart, workHoursEnd, enabled, darkMode, customMessage, autoLaunch, soundEnabled]);
 
   const handleIntervalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
@@ -93,6 +99,12 @@ export default function SettingsForm({
     setHasChanges(true);
   };
 
+  const handleSoundEnabledChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.checked;
+    setLocalSoundEnabled(value);
+    setHasChanges(true);
+  };
+
   const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setLocalMessage(value);
@@ -106,6 +118,7 @@ export default function SettingsForm({
     setDarkMode(localDarkMode);
     setCustomMessage(localMessage);
     setAutoLaunch(localAutoLaunch);
+    setSoundEnabled(localSoundEnabled);
     onSave();
     setHasChanges(false);
   };
@@ -212,6 +225,19 @@ export default function SettingsForm({
             id="autoLaunch"
             checked={localAutoLaunch}
             onChange={handleAutoLaunchChange}
+            className="w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+          />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <label htmlFor="soundEnabled" className="text-sm font-medium">
+            Sound Notification
+          </label>
+          <input
+            type="checkbox"
+            id="soundEnabled"
+            checked={localSoundEnabled}
+            onChange={handleSoundEnabledChange}
             className="w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
           />
         </div>

@@ -6,6 +6,7 @@ export interface Settings {
   darkMode: boolean;
   customMessage: string;
   autoLaunch: boolean;
+  soundEnabled: boolean;
 }
 
 export interface IElectronAPI {
