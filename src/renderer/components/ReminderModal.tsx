@@ -52,6 +52,11 @@ export default function ReminderModal({
           <h2 className="text-2xl font-bold text-primary-600 dark:text-primary-400">
             {message}
           </h2>
+          {message !== 'Time to stretch!' && message !== 'Time for a quick stretch!' && (
+            <p className="text-xs text-primary-500 dark:text-primary-400 mt-2 italic">
+              ✨ Your custom reminder
+            </p>
+          )}
           <p className="text-gray-600 dark:text-gray-400 mt-2">
             Take a quick break to stretch!
           </p>

@@ -185,7 +185,25 @@ export default function SettingsForm({
           onChange={handleMessageChange}
           className="input"
           placeholder="Time to stretch!"
+          maxLength={60}
         />
+        <div className="flex justify-between items-center mt-1">
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            Personalize your reminder message
+          </span>
+          <span className={`text-xs ${localMessage.length > 60 ? 'text-red-500' : 'text-gray-400 dark:text-gray-500'}`}>
+            {localMessage.length}/60
+          </span>
+        </div>
+        {/* Message Preview */}
+        {localMessage && (
+          <div className="mt-3 p-3 bg-primary-50 dark:bg-gray-700 rounded-lg">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Preview:</p>
+            <p className="text-sm font-semibold text-primary-700 dark:text-primary-300">
+              {localMessage}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Toggles */}

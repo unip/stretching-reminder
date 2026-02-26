@@ -72,4 +72,22 @@ describe('ReminderModal', () => {
     fireEvent.click(screen.getByRole('button', { name: /close/i }));
     expect(defaultProps.onClose).toHaveBeenCalledTimes(1);
   });
+
+  it('should display custom message indicator for non-default messages', () => {
+    const customProps = {
+      ...defaultProps,
+      message: 'Drink water and stretch!',
+    };
+    render(<ReminderModal {...customProps} />);
+    expect(screen.getByText(/custom reminder/i)).toBeInTheDocument();
+  });
+
+  it('should not display custom message indicator for default messages', () => {
+    const defaultMsgProps = {
+      ...defaultProps,
+      message: 'Time to stretch!',
+    };
+    render(<ReminderModal {...defaultMsgProps} />);
+    expect(screen.queryByText(/custom reminder/i)).not.toBeInTheDocument();
+  });
 });

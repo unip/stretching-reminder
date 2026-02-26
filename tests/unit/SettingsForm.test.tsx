@@ -146,4 +146,31 @@ describe('SettingsForm', () => {
     expect(defaultProps.setIntervalMinutes).toHaveBeenCalledWith(45);
     expect(defaultProps.onSave).toHaveBeenCalledTimes(1);
   });
+
+  it('should display character counter for custom message', () => {
+    render(<SettingsForm {...defaultProps} />);
+    // Default message "Time to stretch!" has 16 characters
+    expect(screen.getByText('16/60')).toBeInTheDocument();
+  });
+
+  it('should update character counter when message is typed', () => {
+    render(<SettingsForm {...defaultProps} />);
+    const input = screen.getByLabelText(/custom reminder message/i);
+    fireEvent.change(input, { target: { value: 'Hello World' } });
+    expect(screen.getByText(/11\/60/i)).toBeInTheDocument();
+  });
+
+  it('should show message preview when typing', () => {
+    render(<SettingsForm {...defaultProps} />);
+    const input = screen.getByLabelText(/custom reminder message/i);
+    fireEvent.change(input, { target: { value: 'Test Message' } });
+    expect(screen.getByText('Test Message')).toBeInTheDocument();
+    expect(screen.getByText(/preview/i)).toBeInTheDocument();
+  });
+
+  it('should have maxLength of 60 on message input', () => {
+    render(<SettingsForm {...defaultProps} />);
+    const input = screen.getByLabelText(/custom reminder message/i) as HTMLInputElement;
+    expect(input.maxLength).toBe(60);
+  });
 });
