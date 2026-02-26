@@ -4,6 +4,7 @@ import { SettingsStore } from './settingsStore';
 import { NotificationService } from './notificationService';
 import { TimerService } from './timer';
 import { TrayService } from './trayService';
+import { AutoLaunchService } from './autoLaunchService';
 import { registerIPCHandlers, unregisterIPCHandlers } from './ipcHandlers';
 
 console.log('=== Main process starting ===');
@@ -16,6 +17,7 @@ let settingsStore: SettingsStore | null = null;
 let notificationService: NotificationService | null = null;
 let timerService: TimerService | null = null;
 let trayService: TrayService | null = null;
+let autoLaunchService: AutoLaunchService | null = null;
 
 // Log when app is ready
 app.on('ready', () => {
@@ -72,10 +74,16 @@ function initializeServices() {
   notificationService = new NotificationService();
   timerService = new TimerService();
   trayService = new TrayService();
+  autoLaunchService = new AutoLaunchService();
 
   // Initialize timer with work hours from settings
   const settings = settingsStore.getSettings();
   timerService.setWorkHours(settings.workHoursStart, settings.workHoursEnd);
+
+  // Initialize auto-launch based on settings
+  if (settings.autoLaunch) {
+    autoLaunchService.enable().catch(console.error);
+  }
 
   trayService.create(
     () => {
@@ -142,8 +150,8 @@ app.whenReady().then(() => {
   console.log('=== app.whenReady() resolved ===');
   createWindow();
   initializeServices();
-  if (mainWindow && settingsStore && notificationService && timerService) {
-    registerIPCHandlers(mainWindow, settingsStore, notificationService, timerService);
+  if (mainWindow && settingsStore && notificationService && timerService && autoLaunchService) {
+    registerIPCHandlers(mainWindow, settingsStore, notificationService, timerService, autoLaunchService);
   }
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
@@ -166,6 +174,7 @@ app.on('before-quit', () => {
   settingsStore?.dispose();
   notificationService?.dispose();
   timerService?.dispose();
+  autoLaunchService = null;
 });
 
 ipcMain.handle('get-version', () => app.getVersion());

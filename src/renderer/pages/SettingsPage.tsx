@@ -55,11 +55,13 @@ export default function SettingsPage({ onBack, store: propStore }: SettingsPageP
             enabled={state.enabled}
             darkMode={state.darkMode}
             customMessage={state.customMessage}
+            autoLaunch={state.autoLaunch}
             setIntervalMinutes={internalStore.getState().setIntervalMinutes}
             setWorkHours={internalStore.getState().setWorkHours}
             setEnabled={internalStore.getState().setEnabled}
             setDarkMode={internalStore.getState().setDarkMode}
             setCustomMessage={internalStore.getState().setCustomMessage}
+            setAutoLaunch={internalStore.getState().setAutoLaunch}
             onSave={handleSave}
           />
         </div>

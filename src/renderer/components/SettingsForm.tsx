@@ -7,11 +7,13 @@ interface SettingsFormProps {
   enabled: boolean;
   darkMode: boolean;
   customMessage: string;
+  autoLaunch: boolean;
   setIntervalMinutes: (minutes: number) => void;
   setWorkHours: (start: number, end: number) => void;
   setEnabled: (enabled: boolean) => void;
   setDarkMode: (darkMode: boolean) => void;
   setCustomMessage: (message: string) => void;
+  setAutoLaunch: (enabled: boolean) => void;
   onSave: () => void;
 }
 
@@ -22,11 +24,13 @@ export default function SettingsForm({
   enabled,
   darkMode,
   customMessage,
+  autoLaunch,
   setIntervalMinutes,
   setWorkHours,
   setEnabled,
   setDarkMode,
   setCustomMessage,
+  setAutoLaunch,
   onSave,
 }: SettingsFormProps) {
   // Local state for inputs to avoid reset on every keystroke
@@ -36,6 +40,7 @@ export default function SettingsForm({
   const [localEnabled, setLocalEnabled] = useState(enabled);
   const [localDarkMode, setLocalDarkMode] = useState(darkMode);
   const [localMessage, setLocalMessage] = useState(customMessage);
+  const [localAutoLaunch, setLocalAutoLaunch] = useState(autoLaunch);
 
   // Track if there are unsaved changes
   const [hasChanges, setHasChanges] = useState(false);
@@ -48,8 +53,9 @@ export default function SettingsForm({
     setLocalEnabled(enabled);
     setLocalDarkMode(darkMode);
     setLocalMessage(customMessage);
+    setLocalAutoLaunch(autoLaunch);
     setHasChanges(false);
-  }, [intervalMinutes, workHoursStart, workHoursEnd, enabled, darkMode, customMessage]);
+  }, [intervalMinutes, workHoursStart, workHoursEnd, enabled, darkMode, customMessage, autoLaunch]);
 
   const handleIntervalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
@@ -81,6 +87,12 @@ export default function SettingsForm({
     setHasChanges(true);
   };
 
+  const handleAutoLaunchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.checked;
+    setLocalAutoLaunch(value);
+    setHasChanges(true);
+  };
+
   const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setLocalMessage(value);
@@ -93,6 +105,7 @@ export default function SettingsForm({
     setEnabled(localEnabled);
     setDarkMode(localDarkMode);
     setCustomMessage(localMessage);
+    setAutoLaunch(localAutoLaunch);
     onSave();
     setHasChanges(false);
   };
@@ -186,6 +199,19 @@ export default function SettingsForm({
             id="darkMode"
             checked={localDarkMode}
             onChange={handleDarkModeChange}
+            className="w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+          />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <label htmlFor="autoLaunch" className="text-sm font-medium">
+            Auto-Launch on Startup
+          </label>
+          <input
+            type="checkbox"
+            id="autoLaunch"
+            checked={localAutoLaunch}
+            onChange={handleAutoLaunchChange}
             className="w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
           />
         </div>

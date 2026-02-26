@@ -2,12 +2,14 @@ import { ipcMain, BrowserWindow } from 'electron';
 import { SettingsStore } from './settingsStore';
 import { NotificationService } from './notificationService';
 import { TimerService } from './timer';
+import { AutoLaunchService } from './autoLaunchService';
 
 export function registerIPCHandlers(
   mainWindow: BrowserWindow,
   settingsStore: SettingsStore,
   notificationService: NotificationService,
-  timerService: TimerService
+  timerService: TimerService,
+  autoLaunchService: AutoLaunchService
 ): void {
   // Settings handlers
   ipcMain.handle('get-settings', () => settingsStore.getSettings());
@@ -31,6 +33,15 @@ export function registerIPCHandlers(
 
   ipcMain.handle('set-custom-message', (_, message: string) => {
     settingsStore.setCustomMessage(message);
+  });
+
+  // Auto-launch handlers
+  ipcMain.handle('toggle-auto-launch', async () => {
+    return await autoLaunchService.toggle();
+  });
+
+  ipcMain.handle('check-auto-launch', async () => {
+    return await autoLaunchService.checkEnabled();
   });
 
   // Timer handlers
@@ -92,11 +103,14 @@ export function unregisterIPCHandlers(): void {
   ipcMain.removeHandler('toggle-enabled');
   ipcMain.removeHandler('toggle-dark-mode');
   ipcMain.removeHandler('set-custom-message');
+  ipcMain.removeHandler('toggle-auto-launch');
+  ipcMain.removeHandler('check-auto-launch');
   ipcMain.removeHandler('start-timer');
   ipcMain.removeHandler('pause-timer');
   ipcMain.removeHandler('resume-timer');
   ipcMain.removeHandler('reset-timer');
   ipcMain.removeHandler('get-timer-state');
+  ipcMain.removeHandler('check-work-hours');
   ipcMain.removeHandler('show-notification');
   ipcMain.removeHandler('show-reminder');
 }

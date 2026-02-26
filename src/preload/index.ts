@@ -7,6 +7,7 @@ export interface Settings {
   enabled: boolean;
   darkMode: boolean;
   customMessage: string;
+  autoLaunch: boolean;
 }
 
 export interface IElectronAPI {
@@ -20,6 +21,8 @@ export interface IElectronAPI {
   toggleEnabled: () => Promise<void>;
   toggleDarkMode: () => Promise<void>;
   setCustomMessage: (message: string) => Promise<void>;
+  toggleAutoLaunch: () => Promise<boolean>;
+  checkAutoLaunch: () => Promise<boolean>;
   onSettingsChanged: (callback: (settings: Settings) => void) => void;
   
   // Timer
@@ -54,6 +57,8 @@ const electronAPI: IElectronAPI = {
   toggleDarkMode: () => ipcRenderer.invoke('toggle-dark-mode'),
   setCustomMessage: (message: string) =>
     ipcRenderer.invoke('set-custom-message', message),
+  toggleAutoLaunch: () => ipcRenderer.invoke('toggle-auto-launch'),
+  checkAutoLaunch: () => ipcRenderer.invoke('check-auto-launch'),
   onSettingsChanged: (callback: (settings: Settings) => void) => {
     ipcRenderer.on('settings-changed', (_, settings) => callback(settings));
   },
