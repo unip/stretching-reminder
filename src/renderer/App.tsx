@@ -38,7 +38,9 @@ function App() {
   // Initialize audio on first user interaction (browser autoplay policy)
   useEffect(() => {
     const handleUserInteraction = () => {
+      console.log('[Sound] User interaction detected, initializing audio...');
       soundService.initializeOnUserInteraction();
+      console.log('[Sound] Audio context state:', soundService.checkEnabled() ? 'enabled' : 'disabled');
       // Remove listeners after first interaction
       document.removeEventListener('click', handleUserInteraction);
       document.removeEventListener('keydown', handleUserInteraction);

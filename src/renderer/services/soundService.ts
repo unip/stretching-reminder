@@ -36,28 +36,45 @@ export class SoundService {
    * Play a gentle notification sound
    */
   playNotification(): void {
-    if (!this.enabled) return;
+    console.log('[Sound] playNotification called, enabled:', this.enabled, 'initialized:', this.isInitialized);
+    
+    if (!this.enabled) {
+      console.log('[Sound] Sound is disabled');
+      return;
+    }
     
     // Initialize on first play if not already done
     if (!this.isInitialized) {
+      console.log('[Sound] Initializing audio context...');
       this.initAudioContext();
     }
     
-    if (!this.audioContext) return;
+    if (!this.audioContext) {
+      console.log('[Sound] Audio context not available');
+      return;
+    }
+
+    console.log('[Sound] Audio context state:', this.audioContext.state);
 
     // Resume audio context if suspended (browser autoplay policy)
     if (this.audioContext.state === 'suspended') {
-      this.audioContext.resume().catch(() => {
-        console.warn('Could not resume audio context');
+      console.log('[Sound] Resuming suspended audio context...');
+      this.audioContext.resume().then(() => {
+        console.log('[Sound] Audio context resumed successfully');
+      }).catch((err) => {
+        console.warn('[Sound] Could not resume audio context:', err);
       });
     }
 
     const now = this.audioContext.currentTime;
+    console.log('[Sound] Playing notification tones at time:', now);
 
     // Create a gentle ascending tone pattern
     this.playTone(523.25, now, 0.1); // C5
     this.playTone(659.25, now + 0.1, 0.1); // E5
     this.playTone(783.99, now + 0.2, 0.2); // G5
+    
+    console.log('[Sound] Notification sound scheduled');
   }
 
   /**

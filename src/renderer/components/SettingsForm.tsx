@@ -233,13 +233,35 @@ export default function SettingsForm({
           <label htmlFor="soundEnabled" className="text-sm font-medium">
             Sound Notification
           </label>
-          <input
-            type="checkbox"
-            id="soundEnabled"
-            checked={localSoundEnabled}
-            onChange={handleSoundEnabledChange}
-            className="w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-          />
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="soundEnabled"
+              checked={localSoundEnabled}
+              onChange={handleSoundEnabledChange}
+              className="w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                // Test sound immediately
+                const audio = new (window.AudioContext || (window as any).webkitAudioContext)();
+                const oscillator = audio.createOscillator();
+                const gain = audio.createGain();
+                oscillator.connect(gain);
+                gain.connect(audio.destination);
+                oscillator.type = 'sine';
+                oscillator.frequency.value = 880;
+                gain.gain.setValueAtTime(0.3, audio.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audio.currentTime + 0.3);
+                oscillator.start(audio.currentTime);
+                oscillator.stop(audio.currentTime + 0.3);
+              }}
+              className="text-xs px-2 py-1 bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded hover:bg-primary-200 dark:hover:bg-primary-800"
+            >
+              🔊 Test
+            </button>
+          </div>
         </div>
       </div>
 
