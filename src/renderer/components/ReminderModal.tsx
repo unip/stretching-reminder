@@ -24,7 +24,7 @@ export default function ReminderModal({
   const [showInstructions, setShowInstructions] = useState(false);
   const [selectedSnooze, setSelectedSnooze] = useState<number>(5); // Default 5 min
 
-  if (!isOpen) return null;
+  if (!isOpen || !exercise) return null;
 
   const handleSnoozeClick = () => {
     setShowSnoozeOptions(true);
@@ -90,15 +90,15 @@ export default function ReminderModal({
         <div className="bg-primary-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
           <div className="flex items-center justify-between mb-2">
             <h3 className="font-semibold text-primary-700 dark:text-primary-300">
-              💡 {exercise.name}
+              💡 {exercise.name || 'Stretch'}
             </h3>
             <span className="text-xs px-2 py-1 bg-primary-200 dark:bg-primary-800 text-primary-800 dark:text-primary-200 rounded capitalize">
-              {exercise.category}
+              {exercise.category || 'general'}
             </span>
           </div>
-          <p className="text-gray-700 dark:text-gray-300 mb-2">{exercise.description}</p>
+          <p className="text-gray-700 dark:text-gray-300 mb-2">{exercise.description || 'Take a moment to stretch.'}</p>
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            ⏱ {exercise.duration}
+            ⏱ {exercise.duration || '1-2 minutes'}
           </p>
           
           {/* Expandable Instructions */}
@@ -109,7 +109,7 @@ export default function ReminderModal({
             {showInstructions ? 'Hide instructions' : 'Show instructions'} ↓
           </button>
           
-          {showInstructions && (
+          {showInstructions && exercise.instructions && exercise.instructions.length > 0 && (
             <div className="mt-3 pt-3 border-t border-primary-200 dark:border-gray-600">
               <ol className="list-decimal list-inside space-y-1 text-sm text-gray-700 dark:text-gray-300">
                 {exercise.instructions.map((instruction, index) => (

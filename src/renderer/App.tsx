@@ -20,8 +20,6 @@ function App() {
   const [isPaused, setIsPaused] = useState(false);
   const [showReminder, setShowReminder] = useState(false);
   const [currentExercise, setCurrentExercise] = useState<Exercise>(() => getRandomExercise());
-  const [lastExerciseId, setLastExerciseId] = useState<string | undefined>(undefined);
-  const [lastCategory, setLastCategory] = useState<string | undefined>(undefined);
   const [settings, setSettings] = useState(settingsStore.getState());
   const [isTimerStarted, setIsTimerStarted] = useState(false);
   const [isWithinWorkHours, setIsWithinWorkHours] = useState(true);
@@ -95,14 +93,17 @@ function App() {
       }
     };
     const handleComplete = () => {
-      const randomExercise = getRandomExercise(lastExerciseId, lastCategory);
+      // Get a random exercise
+      const randomExercise = getRandomExercise();
       setCurrentExercise(randomExercise);
-      setLastExerciseId(randomExercise.id);
-      setLastCategory(randomExercise.category);
       setShowReminder(true);
       setIsTimerStarted(false);
       // Play notification sound
-      soundService.playNotification();
+      try {
+        soundService.playNotification();
+      } catch (err) {
+        console.warn('Sound playback failed:', err);
+      }
     };
 
     timerService.on('tick', handleTick);
