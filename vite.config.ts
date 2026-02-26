@@ -18,3 +18,25 @@ export default defineConfig({
     port: 5173,
   },
 });
+
+export function buildMainProcess() {
+  return {
+    build: {
+      lib: {
+        entry: path.resolve(__dirname, 'src/main/index.ts'),
+        formats: ['es'],
+        fileName: 'index',
+      },
+      outDir: 'dist/main',
+      emptyOutDir: true,
+      rollupOptions: {
+        external: ['electron'],
+        output: {
+          format: 'es',
+        },
+      },
+      minify: false,
+      sourcemap: true,
+    },
+  };
+}

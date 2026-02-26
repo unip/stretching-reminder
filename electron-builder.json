@@ -4,14 +4,15 @@
   "directories": {
     "output": "release"
   },
-  "files": [
-    "dist/**/*",
-    "package.json"
-  ],
+  "afterPack": "scripts/afterPack.js",
+  "asar": false,
+  "files": [],
+  "icon": "assets/icons/icon.png",
   "linux": {
     "target": ["deb", "AppImage"],
     "category": "Utility",
-    "icon": "assets/icons"
+    "icon": "assets/icons",
+    "maintainer": "Stretching Reminder Team <team@stretching-reminder.local>"
   },
   "mac": {
     "target": ["dmg"],

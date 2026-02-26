@@ -5,11 +5,27 @@ export class TrayService {
   private tray: Tray | null = null;
 
   create(onTogglePause: () => void, onOpenSettings: () => void, onQuit: () => void): void {
-    // Use default icon or custom if available
-    const iconPath = path.join(__dirname, '../../assets/icons/icon.png');
+    const appPath = app.getAppPath();
+    console.log('TrayService: App path:', appPath);
     
-    this.tray = new Tray(iconPath || app.getAppPath());
+    let iconPath: string;
     
+    if (appPath.endsWith('app.asar') || appPath.includes('resources/app')) {
+      iconPath = path.join(appPath, 'dist', 'assets', 'icons', 'icon.png');
+    } else {
+      iconPath = path.join(appPath, 'assets', 'icons', 'icon.png');
+    }
+
+    console.log('TrayService: Icon path:', iconPath);
+    
+    try {
+      this.tray = new Tray(iconPath);
+      console.log('TrayService: Tray created successfully');
+    } catch (error) {
+      console.error('TrayService: Failed to create tray:', error);
+      return;
+    }
+
     const contextMenu = Menu.buildFromTemplate([
       {
         label: 'Pause/Resume',
