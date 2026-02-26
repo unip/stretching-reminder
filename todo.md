@@ -1,0 +1,422 @@
+# Stretching Reminder - TODO List
+
+Last updated: February 26, 2026
+
+---
+
+## 🔴 HIGH PRIORITY - Core Features
+
+### Auto-Launch
+- [ ] Write test: Enable adds to startup
+- [ ] Write test: Disable removes from startup
+- [ ] Implement auto-launch wrapper (use `auto-launch` package)
+- [ ] Add settings toggle for auto-launch
+- [ ] Refactor for cross-platform support
+
+**Features:**
+- Start app on system login
+- Enable/disable in settings
+- Cross-platform (Windows, macOS, Linux)
+
+---
+
+### Work Hours Enforcement
+- [ ] Write test: Timer only runs during work hours
+- [ ] Write test: Timer pauses outside work hours
+- [ ] Implement work hours check in timer service
+- [ ] Add UI indicator when paused due to work hours
+- [ ] Update tray tooltip to show "Outside work hours" when applicable
+
+**Features:**
+- Respect configured work hours (start/end)
+- Auto-pause outside work hours
+- Auto-resume at work hours start
+- Visual indicator when paused
+
+---
+
+### Notification Actions
+- [ ] Write test: Notification shows action buttons
+- [ ] Write test: Snooze action triggers callback
+- [ ] Write test: Skip action triggers callback
+- [ ] Implement notification action handlers
+- [ ] Connect actions to timer service
+
+**Features:**
+- Native desktop notifications with buttons
+- Snooze button (delays reminder)
+- Skip button (resets timer)
+- Permission handling
+
+---
+
+### Tray Tooltip (Dynamic)
+- [ ] Write test: Tooltip shows next break time
+- [ ] Update tooltip on timer tick
+- [ ] Handle paused state in tooltip
+- [ ] Handle work hours state in tooltip
+
+**Current Status:** Shows static "Next break in X min"
+**Needed:** Dynamic updates, work hours awareness
+
+---
+
+## 🟡 MEDIUM PRIORITY - UX Improvements
+
+### Progress Indicator
+- [ ] Write test: Progress ring displays correctly
+- [ ] Write test: Progress updates every second
+- [ ] Implement progress ring component
+- [ ] Integrate with TimerDisplay
+- [ ] Add visual completion animation
+
+**Features:**
+- Circular progress ring around timer
+- Smooth animation
+- Color changes (green → yellow → red)
+- Completion pulse animation
+
+---
+
+### Stretch Exercise Library
+- [ ] Write test: Exercise library contains all exercises
+- [ ] Write test: Exercises rotate without immediate repeats
+- [ ] Implement exercise data structure
+- [ ] Add exercise descriptions/instructions
+- [ ] Add exercise illustrations (optional)
+- [ ] Implement smart rotation algorithm
+
+**Current Status:** Random exercise from small array
+**Needed:** Full library, no repeats, better variety
+
+**Exercises to Add:**
+- Neck stretches
+- Shoulder rolls
+- Arm stretches
+- Wrist stretches
+- Back stretches
+- Leg stretches
+- Seated twists
+- Standing stretches
+
+---
+
+### Snooze Options (5/10/15 min)
+- [ ] Write test: Snooze modal shows all options
+- [ ] Write test: Each option sets correct interval
+- [ ] Implement snooze selection UI
+- [ ] Connect to timer service
+- [ ] Add keyboard shortcuts (optional)
+
+**Current Status:** Basic snooze function exists
+**Needed:** User selection UI with 5/10/15 min options
+
+---
+
+### Custom Messages Display
+- [ ] Write test: Custom message appears in reminder
+- [ ] Write test: Default message shows when custom is empty
+- [ ] Update ReminderModal to display custom message
+- [ ] Add character limit validation
+- [ ] Add preview in settings
+
+**Current Status:** Settings save but not displayed
+**Needed:** Display in reminder modal
+
+---
+
+### Enabled/Disabled Toggle
+- [ ] Write test: Toggle enables/disables reminders
+- [ ] Write test: Disabled state persists
+- [ ] Add toggle to SettingsPage
+- [ ] Update timer service to respect enabled state
+- [ ] Add visual indicator in main UI
+
+**Features:**
+- Quick enable/disable from settings
+- Visual indicator when disabled
+- Tray menu quick toggle
+
+---
+
+## 🟢 LOW PRIORITY - Polish & Testing
+
+### Playful Animations
+- [ ] Write test: Modal animation plays on open
+- [ ] Implement modal entrance animation
+- [ ] Add exercise illustration animations
+- [ ] Add completion celebration animation
+- [ ] Add smooth transitions
+
+**Features:**
+- Fade/slide modal entrance
+- Bouncing/stretching exercise icons
+- Confetti or pulse on completion
+- Smooth state transitions
+
+---
+
+### IPC Handler Tests
+- [ ] Write test: get-settings handler returns settings
+- [ ] Write test: set-interval handler updates settings
+- [ ] Write test: timer handlers control timer
+- [ ] Write test: notification handlers show notifications
+- [ ] Write test: settings change events emit
+
+**Files to Test:**
+- `src/main/ipcHandlers.ts`
+
+---
+
+### Manual Testing Checklist
+
+#### Cross-Platform Testing
+- [ ] Notifications work on Linux
+- [ ] Notifications work on macOS
+- [ ] Notifications work on Windows
+- [ ] System tray works on Linux
+- [ ] System tray works on macOS
+- [ ] System tray works on Windows
+- [ ] Auto-launch works on Linux
+- [ ] Auto-launch works on macOS
+- [ ] Auto-launch works on Windows
+
+#### Stability Testing
+- [ ] Settings persist after app restart
+- [ ] No memory leaks after extended use (1+ hour)
+- [ ] Timer accuracy over long periods
+- [ ] Multiple monitor support
+- [ ] Minimize/restore behavior
+
+---
+
+### Code Signing (Distribution)
+- [ ] Research code signing requirements
+- [ ] Obtain certificates (if needed)
+- [ ] Configure electron-builder for signing
+- [ ] Test signed builds
+
+---
+
+### Auto-Update (Optional)
+- [ ] Integrate electron-updater
+- [ ] Configure update server (GitHub Releases)
+- [ ] Add auto-update preferences
+- [ ] Test update flow
+- [ ] Handle update errors gracefully
+
+---
+
+## ✅ COMPLETED FEATURES
+
+### Project Setup & Infrastructure ✅
+- [x] Initialize project with Vite + Electron + TypeScript
+- [x] Configure Tailwind CSS
+- [x] Set up ESLint + Prettier (v9 flat config)
+- [x] Configure Vitest for unit testing
+- [x] Configure Playwright for E2E testing
+- [x] Set up folder structure
+
+**Acceptance Criteria Met:**
+- [x] `npm run dev` launches dev server with hot reload
+- [x] `npm run test` runs all tests (66 passing)
+- [x] `npm run build` produces production build
+- [x] Tailwind classes apply correctly
+
+---
+
+### Backend (Main Process) ✅
+
+#### Timer Service ✅
+- [x] Write test: Timer emits event after interval
+- [x] Write test: Timer can be paused/resumed
+- [x] Write test: Timer can be reset
+- [x] Implement timer service
+- [x] Refactor for clean API
+
+**Features Implemented:**
+- [x] Configurable interval (default: 30 min)
+- [x] Pause/Resume/Reset controls
+- [x] Event emission for UI updates
+
+#### Notification Service ✅
+- [x] Write test: Notification shows with title/body
+- [x] Implement notification wrapper
+- [x] Refactor for reusability
+
+**Features Implemented:**
+- [x] Native desktop notifications
+- [x] Permission handling
+
+**Note:** Action buttons pending (see High Priority)
+
+#### Settings Store ✅
+- [x] Write test: Settings persist after restart
+- [x] Write test: Settings emit change events
+- [x] Write test: Default values on first launch
+- [x] Implement store with electron-store
+- [x] Refactor for type safety
+
+**Features Implemented:**
+- [x] Interval duration
+- [x] Work hours (start/end)
+- [x] Dark mode preference
+- [x] Custom messages
+
+**Note:** Enabled/disabled toggle pending
+
+#### System Tray ✅
+- [x] Implement tray with context menu
+- [x] Refactor for clean separation
+
+**Features Implemented:**
+- [x] Tray icon with status indicator
+- [x] Menu: Pause, Settings, Quit
+
+**Note:** Tooltip dynamic updates pending
+
+---
+
+### Frontend (Renderer Process) ✅
+
+#### UI Components ✅
+- [x] Implement reusable components (Button, Input, Toggle, Card)
+- [x] Tailwind styling
+
+#### Timer Display ✅
+- [x] Write test: Displays remaining time
+- [x] Write test: Updates every second
+- [x] Write test: Shows paused state
+- [x] Connect to main process timer
+
+**Features Implemented:**
+- [x] Large countdown display
+- [x] Pause/Resume buttons
+
+**Note:** Progress indicator pending
+
+#### Settings Page ✅
+- [x] Write test: Form loads current settings
+- [x] Write test: Changes save to store
+- [x] Implement settings form
+
+**Features Implemented:**
+- [x] Interval input (minutes)
+- [x] Work hours time pickers
+- [x] Dark mode toggle
+- [x] Custom message input
+
+**Note:** Enabled/disabled toggle and auto-launch toggle pending
+
+#### Reminder Modal ✅
+- [x] Write test: Modal appears on timer complete
+- [x] Write test: Snooze button delays reminder
+- [x] Write test: Skip button resets timer
+- [x] Implement modal with stretch suggestions
+
+**Features Implemented:**
+- [x] Stretch exercise display
+- [x] Snooze button
+- [x] Skip button
+
+**Note:** Snooze options (5/10/15) and animations pending
+
+#### State Management (Zustand) ✅
+- [x] Write test: Store initializes with defaults
+- [x] Write test: Actions update state
+- [x] Write test: Subscribers receive updates
+- [x] Implement store slices
+
+**Slices Implemented:**
+- [x] Settings state
+- [x] UI state (modal, theme)
+
+---
+
+### Testing ✅
+
+#### Unit Tests (Vitest) ✅
+- [x] Timer service tests (8 tests)
+- [x] Settings store tests (9 tests)
+- [x] Settings store backend tests (8 tests)
+- [x] Notification service tests (6 tests)
+
+#### Component Tests (React Testing Library) ✅
+- [x] Timer display tests (7 tests)
+- [x] Settings form tests (18 tests)
+- [x] Settings page tests (3 tests)
+- [x] Reminder modal tests (7 tests)
+
+**Total: 66 tests passing**
+
+#### E2E Tests (Playwright) ✅
+- [x] App launches successfully
+- [x] App displays title
+- [x] Start timer button works
+- [x] Navigate to settings page
+- [x] Change interval and save
+- [x] Toggle dark mode
+- [x] Start timer and verify countdown
+- [x] Persist settings after reload
+
+**Total: 7 E2E tests passing**
+
+---
+
+### Deployment ✅
+
+#### Build Configuration ✅
+- [x] Configure electron-builder
+- [x] Set up app icons
+- [x] Optimize bundle size
+
+---
+
+## Tech Stack (Current)
+
+| Layer | Technology | Version |
+|-------|------------|---------|
+| Framework | Electron | 40.6.1 |
+| Frontend | React | 19.1.0 |
+| Language | TypeScript | 5.8.3 |
+| Styling | Tailwind CSS | 3.4.17 |
+| Build Tool | Vite | 6.3.5 |
+| Testing (Unit) | Vitest | 3.2.4 |
+| Testing (E2E) | Playwright | 1.58.2 |
+| State Management | Zustand | 5.0.5 |
+| Persistence | electron-store | 8.2.0 |
+| Linting | ESLint | 9.39.3 |
+| Formatting | Prettier | 3.8.1 |
+
+---
+
+## Development Workflow
+
+### For Each Feature:
+1. **Write test** in `tests/` or alongside code (`*.test.ts`)
+2. **Run tests** - should fail (Red)
+3. **Implement feature** with minimal code
+4. **Run tests** - should pass (Green)
+5. **Refactor** - improve code quality, keep tests passing
+6. **Commit** with descriptive message
+
+### Commands:
+```bash
+npm run dev          # Start dev server
+npm run test         # Run unit + component tests
+npm run test:e2e     # Run E2E tests
+npm run build        # Production build
+npm run lint         # Check code with ESLint
+npm run lint:fix     # Auto-fix ESLint issues
+npm run format       # Format with Prettier
+npm run typecheck    # TypeScript type check
+```
+
+---
+
+## Next Recommended Steps
+
+1. **Work Hours Enforcement** - Core functionality that's currently missing
+2. **Auto-Launch** - High user convenience feature
+3. **Notification Actions** - Complete native notification integration
+4. **Progress Indicator** - Visual polish for timer display
