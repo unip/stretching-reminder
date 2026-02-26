@@ -24,18 +24,6 @@ export default function ReminderModal({
   const [showInstructions, setShowInstructions] = useState(false);
   const [selectedSnooze, setSelectedSnooze] = useState<number>(5); // Default 5 min
 
-  if (!isOpen || !exercise) return null;
-
-  const handleSnoozeClick = () => {
-    setShowSnoozeOptions(true);
-  };
-
-  const handleSnoozeSelect = (minutes: number) => {
-    setSelectedSnooze(minutes);
-    onSnooze(minutes);
-    setShowSnoozeOptions(false);
-  };
-
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -57,6 +45,18 @@ export default function ReminderModal({
     document.addEventListener('keydown', handleKeyPress);
     return () => document.removeEventListener('keydown', handleKeyPress);
   }, [isOpen, showSnoozeOptions, onSnooze, onSkip, onClose]);
+
+  if (!isOpen) return null;
+
+  const handleSnoozeClick = () => {
+    setShowSnoozeOptions(true);
+  };
+
+  const handleSnoozeSelect = (minutes: number) => {
+    setSelectedSnooze(minutes);
+    onSnooze(minutes);
+    setShowSnoozeOptions(false);
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -87,6 +87,7 @@ export default function ReminderModal({
         </div>
 
         {/* Exercise Suggestion */}
+        {exercise && (
         <div className="bg-primary-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
           <div className="flex items-center justify-between mb-2">
             <h3 className="font-semibold text-primary-700 dark:text-primary-300">
@@ -119,6 +120,7 @@ export default function ReminderModal({
             </div>
           )}
         </div>
+        )}
 
         {/* Action Buttons */}
         {!showSnoozeOptions ? (
