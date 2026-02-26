@@ -36,18 +36,19 @@ Last updated: February 26, 2026
 
 ---
 
-### Notification Actions
-- [ ] Write test: Notification shows action buttons
-- [ ] Write test: Snooze action triggers callback
-- [ ] Write test: Skip action triggers callback
-- [ ] Implement notification action handlers
-- [ ] Connect actions to timer service
+### Notification Actions ✅
+- [x] Write test: Notification shows action buttons
+- [x] Write test: Snooze action triggers callback
+- [x] Write test: Skip action triggers callback
+- [x] Implement notification action handlers
+- [x] Connect actions to timer service
 
-**Features:**
-- Native desktop notifications with buttons
-- Snooze button (delays reminder)
-- Skip button (resets timer)
-- Permission handling
+**Features Implemented:**
+- [x] Native desktop notifications with Snooze 5 min and Skip buttons
+- [x] NotificationService extends EventEmitter for action events
+- [x] Main process handles actions and controls timer
+- [x] Renderer listens for notification actions via IPC
+- [x] Auto-snooze (5 min) and skip functionality
 
 ---
 
