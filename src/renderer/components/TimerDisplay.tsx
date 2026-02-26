@@ -1,5 +1,8 @@
+import ProgressRing from './ProgressRing';
+
 interface TimerDisplayProps {
   remainingTime: number;
+  interval?: number;
   isPaused?: boolean;
   onPause?: () => void;
   onResume?: () => void;
@@ -20,11 +23,15 @@ function formatTime(ms: number): string {
 
 export default function TimerDisplay({
   remainingTime,
+  interval,
   isPaused = false,
   onPause,
   onResume,
   onReset,
 }: TimerDisplayProps) {
+  // Calculate progress percentage (0-100)
+  const progress = interval ? (remainingTime / interval) * 100 : 0;
+
   return (
     <div className="card text-center">
       <div className="mb-6">
@@ -36,8 +43,22 @@ export default function TimerDisplay({
             ⏸ PAUSED
           </div>
         )}
-        <div className="text-6xl font-bold text-gray-800 dark:text-gray-100 font-mono">
-          {formatTime(remainingTime)}
+        
+        {/* Progress Ring with Timer */}
+        <div className="flex justify-center mb-6">
+          <ProgressRing
+            progress={progress}
+            size={220}
+            strokeWidth={12}
+            showPercentage={true}
+            isComplete={remainingTime === 0}
+          >
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <div className="text-5xl font-bold text-gray-800 dark:text-gray-100 font-mono mt-8">
+                {formatTime(remainingTime)}
+              </div>
+            </div>
+          </ProgressRing>
         </div>
       </div>
 

@@ -5,12 +5,13 @@ import TimerDisplay from '../../src/renderer/components/TimerDisplay';
 describe('TimerDisplay', () => {
   it('should display remaining time in MM:SS format', () => {
     render(<TimerDisplay remainingTime={5 * 60 * 1000} />); // 5 minutes
-    expect(screen.getByText('05:00')).toBeInTheDocument();
+    // Time is displayed inside ProgressRing, use text matcher
+    expect(screen.getByText((text) => text.includes('05:00'))).toBeInTheDocument();
   });
 
   it('should display hours when time is greater than 60 minutes', () => {
     render(<TimerDisplay remainingTime={90 * 60 * 1000} />); // 90 minutes
-    expect(screen.getByText('01:30:00')).toBeInTheDocument();
+    expect(screen.getByText((text) => text.includes('01:30:00'))).toBeInTheDocument();
   });
 
   it('should show paused state when isPaused is true', () => {

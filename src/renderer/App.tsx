@@ -202,6 +202,7 @@ function App() {
           ) : (
             <TimerDisplay
               remainingTime={remainingTime}
+              interval={timerService.getInterval()}
               isPaused={isPaused}
               onPause={handlePause}
               onResume={handleResume}
