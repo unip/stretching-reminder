@@ -66,21 +66,20 @@ Last updated: February 26, 2026
 
 ## 🟡 MEDIUM PRIORITY - UX Improvements
 
-### Sound Notification
-- [ ] Write test: Sound plays on reminder
-- [ ] Write test: Sound can be enabled/disabled
-- [ ] Write test: Custom sound selection works
-- [ ] Implement sound player service
-- [ ] Add sound toggle to settings
-- [ ] Add sound selection dropdown (optional)
-- [ ] Persist sound preference
+### Sound Notification ✅
+- [x] Write test: Sound plays on reminder
+- [x] Write test: Sound can be enabled/disabled
+- [x] Write test: Custom sound selection works
+- [x] Implement sound player service
+- [x] Add sound toggle to settings
+- [x] Persist sound preference
 
-**Features:**
-- Play sound when reminder appears
-- Enable/disable in settings
-- Default gentle alert sound
-- Optional: Multiple sound options
-- Volume control (optional)
+**Features Implemented:**
+- [x] Play sound when reminder appears
+- [x] Enable/disable in settings
+- [x] Web Audio API implementation (no external files)
+- [x] Gentle ascending tone pattern (C5-E5-G5)
+- [x] Sound preference persistence
 
 ---
 
@@ -456,7 +455,7 @@ npm run typecheck    # TypeScript type check
 
 ## Next Recommended Steps
 
-1. **Sound Notification** - Add audio feedback for reminders
-2. **Window Customization** - Custom title bar with themed controls
-3. **Progress Indicator** - Visual polish for timer display
-4. **Stretch Exercise Library** - Expand exercise variety
+1. **Window Customization** - Custom title bar with themed controls
+2. **Progress Indicator** - Visual polish for timer display
+3. **Stretch Exercise Library** - Expand exercise variety
+4. **Snooze Options UI** - 5/10/15 minute selection
