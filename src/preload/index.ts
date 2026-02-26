@@ -35,6 +35,7 @@ export interface IElectronAPI {
   onTimerTick: (callback: (remainingTime: number) => void) => void;
   onTimerComplete: (callback: () => void) => void;
   onWorkHoursChanged: (callback: (state: { isWithinWorkHours: boolean }) => void) => void;
+  onNotificationAction: (callback: (action: 'snooze' | 'skip') => void) => void;
   
   // Notifications
   showNotification: (title: string, body: string) => Promise<void>;
@@ -78,6 +79,9 @@ const electronAPI: IElectronAPI = {
   },
   onWorkHoursChanged: (callback: (state: { isWithinWorkHours: boolean }) => void) => {
     ipcRenderer.on('work-hours-changed', (_, state) => callback(state));
+  },
+  onNotificationAction: (callback: (action: 'snooze' | 'skip') => void) => {
+    ipcRenderer.on('notification-action', (_, action) => callback(action));
   },
   
   // Notifications

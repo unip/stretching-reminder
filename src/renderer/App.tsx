@@ -121,6 +121,23 @@ function App() {
     setShowReminder(false);
   }, []);
 
+  // Listen for notification actions from main process
+  useEffect(() => {
+    const handleNotificationAction = (action: 'snooze' | 'skip') => {
+      if (action === 'snooze') {
+        handleSnooze(5);
+      } else if (action === 'skip') {
+        handleSkip();
+      }
+    };
+
+    window.electron?.onNotificationAction(handleNotificationAction);
+
+    return () => {
+      window.electron?.onNotificationAction(() => {});
+    };
+  }, [handleSnooze, handleSkip]);
+
   const isTimerRunning = remainingTime < timerService.getInterval() || isPaused || isTimerStarted;
 
   return (

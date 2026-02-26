@@ -31,6 +31,7 @@ export interface IElectronAPI {
   onTimerTick: (callback: (remainingTime: number) => void) => void;
   onTimerComplete: (callback: () => void) => void;
   onWorkHoursChanged: (callback: (state: { isWithinWorkHours: boolean }) => void) => void;
+  onNotificationAction: (callback: (action: 'snooze' | 'skip') => void) => void;
   
   // Notifications
   showNotification: (title: string, body: string) => Promise<void>;

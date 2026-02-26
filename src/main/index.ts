@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import { SettingsStore } from './settingsStore';
-import { NotificationService } from './notificationService';
+import { NotificationService, NotificationAction } from './notificationService';
 import { TimerService } from './timer';
 import { TrayService } from './trayService';
 import { AutoLaunchService } from './autoLaunchService';
@@ -116,6 +116,26 @@ function initializeServices() {
       } else {
         trayService?.setToolTip('Outside work hours - timer paused');
       }
+    }
+  });
+
+  // Handle notification actions
+  notificationService.on('action', (action: NotificationAction) => {
+    if (mainWindow) {
+      mainWindow.webContents.send('notification-action', action);
+    }
+    
+    if (action === 'snooze') {
+      // Snooze for 5 minutes
+      timerService?.setInterval(5 * 60 * 1000);
+      timerService?.reset();
+      timerService?.start();
+      trayService?.setToolTip('Snoozed for 5 min');
+    } else if (action === 'skip') {
+      // Skip this break
+      timerService?.reset();
+      timerService?.start();
+      trayService?.setToolTip(`Next break in ${settingsStore?.getSettings().intervalMinutes} min`);
     }
   });
 
