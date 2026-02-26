@@ -1,22 +1,16 @@
 import { useState } from 'react';
+import type { Exercise } from '../data/exerciseLibrary';
 
 interface ReminderModalProps {
   isOpen: boolean;
   message: string;
-  exercise: string;
+  exercise: Exercise;
   onSnooze: (minutes?: number) => void;
   onSkip: () => void;
   onClose: () => void;
 }
 
-const EXERCISES = [
-  'Neck Stretch: Tilt your head to one side, hold for 15 seconds.',
-  'Shoulder Roll: Roll your shoulders backward 10 times.',
-  'Arm Stretch: Extend arms overhead, hold for 20 seconds.',
-  'Wrist Stretch: Rotate wrists clockwise and counterclockwise.',
-  'Back Stretch: Stand up, reach for the sky, hold for 15 seconds.',
-  'Leg Stretch: Extend one leg forward, hold for 20 seconds each.',
-];
+const EXERCISES = []; // Kept for backwards compatibility, use exerciseLibrary instead
 
 export default function ReminderModal({
   isOpen,
@@ -27,6 +21,7 @@ export default function ReminderModal({
   onClose,
 }: ReminderModalProps) {
   const [showSnoozeOptions, setShowSnoozeOptions] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   if (!isOpen) return null;
 
@@ -64,10 +59,36 @@ export default function ReminderModal({
 
         {/* Exercise Suggestion */}
         <div className="bg-primary-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
-          <h3 className="font-semibold text-primary-700 dark:text-primary-300 mb-2">
-            💡 Suggested Stretch
-          </h3>
-          <p className="text-gray-700 dark:text-gray-300">{exercise}</p>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-semibold text-primary-700 dark:text-primary-300">
+              💡 {exercise.name}
+            </h3>
+            <span className="text-xs px-2 py-1 bg-primary-200 dark:bg-primary-800 text-primary-800 dark:text-primary-200 rounded capitalize">
+              {exercise.category}
+            </span>
+          </div>
+          <p className="text-gray-700 dark:text-gray-300 mb-2">{exercise.description}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            ⏱ {exercise.duration}
+          </p>
+          
+          {/* Expandable Instructions */}
+          <button
+            onClick={() => setShowInstructions(!showInstructions)}
+            className="mt-3 text-sm text-primary-600 dark:text-primary-400 hover:underline"
+          >
+            {showInstructions ? 'Hide instructions' : 'Show instructions'} ↓
+          </button>
+          
+          {showInstructions && (
+            <div className="mt-3 pt-3 border-t border-primary-200 dark:border-gray-600">
+              <ol className="list-decimal list-inside space-y-1 text-sm text-gray-700 dark:text-gray-300">
+                {exercise.instructions.map((instruction, index) => (
+                  <li key={index}>{instruction}</li>
+                ))}
+              </ol>
+            </div>
+          )}
         </div>
 
         {/* Action Buttons */}

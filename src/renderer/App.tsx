@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import TimerDisplay from './components/TimerDisplay';
-import ReminderModal, { EXERCISES } from './components/ReminderModal';
+import ReminderModal from './components/ReminderModal';
 import SettingsPage from './pages/SettingsPage';
 import { createSettingsStore } from './store/settingsStore';
 import { TimerService } from '../main/timer';
 import { SoundService } from './services/soundService';
+import { getRandomExercise, type Exercise } from './data/exerciseLibrary';
 
 // Create shared store once
 const settingsStore = createSettingsStore();
@@ -18,7 +19,9 @@ function App() {
   const [remainingTime, setRemainingTime] = useState(timerService.getRemainingTime());
   const [isPaused, setIsPaused] = useState(false);
   const [showReminder, setShowReminder] = useState(false);
-  const [currentExercise, setCurrentExercise] = useState(EXERCISES[0]);
+  const [currentExercise, setCurrentExercise] = useState<Exercise>(() => getRandomExercise());
+  const [lastExerciseId, setLastExerciseId] = useState<string | undefined>(undefined);
+  const [lastCategory, setLastCategory] = useState<string | undefined>(undefined);
   const [settings, setSettings] = useState(settingsStore.getState());
   const [isTimerStarted, setIsTimerStarted] = useState(false);
   const [isWithinWorkHours, setIsWithinWorkHours] = useState(true);
@@ -92,8 +95,10 @@ function App() {
       }
     };
     const handleComplete = () => {
-      const randomExercise = EXERCISES[Math.floor(Math.random() * EXERCISES.length)];
+      const randomExercise = getRandomExercise(lastExerciseId, lastCategory);
       setCurrentExercise(randomExercise);
+      setLastExerciseId(randomExercise.id);
+      setLastCategory(randomExercise.category);
       setShowReminder(true);
       setIsTimerStarted(false);
       // Play notification sound

@@ -27,34 +27,34 @@ export default function TimerDisplay({
   isPaused = false,
   onPause,
   onResume,
-  onReset,
+  onReset
 }: TimerDisplayProps) {
   // Calculate progress percentage (0-100)
   const progress = interval ? (remainingTime / interval) * 100 : 0;
 
   return (
-    <div className="card text-center">
+    <div className="text-center card">
       <div className="mb-6">
         {isPaused && (
           <div
             data-testid="paused-indicator"
-            className="text-sm font-medium mb-2 text-primary-600 dark:text-primary-400"
+            className="mb-2 text-sm font-medium text-primary-600 dark:text-primary-400"
           >
             ⏸ PAUSED
           </div>
         )}
-        
+
         {/* Progress Ring with Timer */}
         <div className="flex justify-center mb-6">
           <ProgressRing
             progress={progress}
             size={220}
-            strokeWidth={12}
+            strokeWidth={18}
             showPercentage={true}
             isComplete={remainingTime === 0}
           >
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <div className="text-5xl font-bold text-gray-800 dark:text-gray-100 font-mono mt-8">
+              <div className="text-5xl font-bold text-gray-800 dark:text-gray-100">
                 {formatTime(remainingTime)}
               </div>
             </div>
@@ -62,29 +62,17 @@ export default function TimerDisplay({
         </div>
       </div>
 
-      <div className="flex gap-3 justify-center">
+      <div className="flex justify-center gap-3">
         {isPaused ? (
-          <button
-            onClick={onResume}
-            className="btn-primary"
-            aria-label="Resume timer"
-          >
+          <button onClick={onResume} className="btn-primary" aria-label="Resume timer">
             ▶ Resume
           </button>
         ) : (
-          <button
-            onClick={onPause}
-            className="btn-primary"
-            aria-label="Pause timer"
-          >
+          <button onClick={onPause} className="btn-primary" aria-label="Pause timer">
             ⏸ Pause
           </button>
         )}
-        <button
-          onClick={onReset}
-          className="btn-secondary"
-          aria-label="Reset timer"
-        >
+        <button onClick={onReset} className="btn-secondary" aria-label="Reset timer">
           ↻ Reset
         </button>
       </div>

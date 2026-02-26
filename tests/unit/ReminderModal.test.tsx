@@ -1,12 +1,28 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ReminderModal from '../../src/renderer/components/ReminderModal';
+import type { Exercise } from '../../src/renderer/data/exerciseLibrary';
 
 describe('ReminderModal', () => {
+  const mockExercise: Exercise = {
+    id: 'neck-1',
+    name: 'Neck Tilt',
+    description: 'Tilt your head to one side, hold for 15 seconds.',
+    duration: '15-20 seconds each side',
+    category: 'neck',
+    difficulty: 'easy',
+    instructions: [
+      'Sit or stand with your back straight',
+      'Slowly tilt your head to the right',
+      'Hold for 15-20 seconds',
+      'Repeat on the left side',
+    ],
+  };
+
   const defaultProps = {
     isOpen: true,
     message: 'Time to stretch!',
-    exercise: 'Neck Stretch: Tilt your head to one side, hold for 15 seconds.',
+    exercise: mockExercise,
     onSnooze: vi.fn(),
     onSkip: vi.fn(),
     onClose: vi.fn(),
@@ -24,7 +40,9 @@ describe('ReminderModal', () => {
 
   it('should render exercise suggestion', () => {
     render(<ReminderModal {...defaultProps} />);
-    expect(screen.getByText(/Neck Stretch/i)).toBeInTheDocument();
+    expect(screen.getByText(/Neck Tilt/i)).toBeInTheDocument();
+    expect(screen.getByText(/Tilt your head/i)).toBeInTheDocument();
+    expect(screen.getByText(/15-20 seconds/i)).toBeInTheDocument();
   });
 
   it('should show snooze options when snooze button is clicked', () => {
