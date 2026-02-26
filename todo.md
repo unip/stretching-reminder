@@ -141,15 +141,21 @@ Last updated: February 26, 2026
 
 ---
 
-### Snooze Options (5/10/15 min)
-- [ ] Write test: Snooze modal shows all options
-- [ ] Write test: Each option sets correct interval
-- [ ] Implement snooze selection UI
-- [ ] Connect to timer service
-- [ ] Add keyboard shortcuts (optional)
+### Snooze Options (5/10/15 min) ✅
+- [x] Write test: Snooze modal shows all options
+- [x] Write test: Each option sets correct interval
+- [x] Implement snooze selection UI
+- [x] Connect to timer service
+- [x] Add keyboard shortcuts
 
-**Current Status:** Basic snooze function exists
-**Needed:** User selection UI with 5/10/15 min options
+**Features Implemented:**
+- [x] Grid layout with 5/10/15 minute buttons
+- [x] Large, clear time display on each button
+- [x] Selected duration highlighted with ring
+- [x] Keyboard shortcuts: S, K, 1, 2, 3, Escape
+- [x] Cancel button to exit selection
+- [x] Remembers last used snooze duration
+- [x] Tooltips show keyboard hints
 
 ---
 
@@ -463,6 +469,6 @@ npm run typecheck    # TypeScript type check
 ## Next Recommended Steps
 
 1. **Window Customization** - Custom title bar with themed controls
-2. **Snooze Options UI** - 5/10/15 minute selection dropdown in modal
-3. **Enabled/Disabled Toggle** - Quick enable/disable from settings
-4. **Playful Animations** - Modal entrance and completion celebrations
+2. **Enabled/Disabled Toggle** - Quick enable/disable from settings
+3. **Playful Animations** - Modal entrance and completion celebrations
+4. **IPC Handler Tests** - Unit tests for IPC handlers
