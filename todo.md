@@ -153,15 +153,20 @@ Last updated: February 26, 2026
 
 ---
 
-### Custom Messages Display
-- [ ] Write test: Custom message appears in reminder
-- [ ] Write test: Default message shows when custom is empty
-- [ ] Update ReminderModal to display custom message
-- [ ] Add character limit validation
-- [ ] Add preview in settings
+### Custom Messages Display ✅
+- [x] Write test: Custom message appears in reminder
+- [x] Write test: Default message shows when custom is empty
+- [x] Update ReminderModal to display custom message
+- [x] Add character limit validation (60 chars)
+- [x] Add preview in settings
 
-**Current Status:** Settings save but not displayed
-**Needed:** Display in reminder modal
+**Features Implemented:**
+- [x] Custom message displayed prominently in modal header
+- [x] "✨ Your custom reminder" badge for non-default messages
+- [x] Real-time character counter in settings
+- [x] Live preview box as you type
+- [x] 60 character limit with maxLength validation
+- [x] SettingsForm shows current character count
 
 ---
 
@@ -459,5 +464,5 @@ npm run typecheck    # TypeScript type check
 
 1. **Window Customization** - Custom title bar with themed controls
 2. **Snooze Options UI** - 5/10/15 minute selection dropdown in modal
-3. **Custom Messages Display** - Show in reminder modal
-4. **Enabled/Disabled Toggle** - Quick enable/disable from settings
+3. **Enabled/Disabled Toggle** - Quick enable/disable from settings
+4. **Playful Animations** - Modal entrance and completion celebrations
