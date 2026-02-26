@@ -35,6 +35,24 @@ function App() {
     return unsubscribe;
   }, []);
 
+  // Initialize audio on first user interaction (browser autoplay policy)
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      soundService.initializeOnUserInteraction();
+      // Remove listeners after first interaction
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('keydown', handleUserInteraction);
+    };
+
+    document.addEventListener('click', handleUserInteraction);
+    document.addEventListener('keydown', handleUserInteraction);
+
+    return () => {
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('keydown', handleUserInteraction);
+    };
+  }, []);
+
   // Listen for work hours changes from main process
   useEffect(() => {
     const unsubscribe = () => {

@@ -1,16 +1,34 @@
 export class SoundService {
   private audioContext: AudioContext | null = null;
   private enabled: boolean = true;
+  private isInitialized: boolean = false;
 
   constructor() {
-    this.initAudioContext();
+    // Don't initialize immediately - wait for user interaction
   }
 
   private initAudioContext(): void {
+    if (this.isInitialized) return;
+    
     try {
       this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      this.isInitialized = true;
     } catch (error) {
       console.warn('Web Audio API not supported:', error);
+    }
+  }
+
+  /**
+   * Initialize audio on first user interaction
+   * Call this on any user click/key press
+   */
+  initializeOnUserInteraction(): void {
+    if (!this.isInitialized) {
+      this.initAudioContext();
+      // Resume if suspended (browser autoplay policy)
+      if (this.audioContext && this.audioContext.state === 'suspended') {
+        this.audioContext.resume();
+      }
     }
   }
 
@@ -18,11 +36,20 @@ export class SoundService {
    * Play a gentle notification sound
    */
   playNotification(): void {
-    if (!this.enabled || !this.audioContext) return;
+    if (!this.enabled) return;
+    
+    // Initialize on first play if not already done
+    if (!this.isInitialized) {
+      this.initAudioContext();
+    }
+    
+    if (!this.audioContext) return;
 
     // Resume audio context if suspended (browser autoplay policy)
     if (this.audioContext.state === 'suspended') {
-      this.audioContext.resume();
+      this.audioContext.resume().catch(() => {
+        console.warn('Could not resume audio context');
+      });
     }
 
     const now = this.audioContext.currentTime;
