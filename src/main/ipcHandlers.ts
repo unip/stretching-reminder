@@ -81,11 +81,11 @@ export function registerIPCHandlers(
   });
 
   // Window control handlers
-  ipcMain.handle('window-minimize', () => {
+  ipcMain.on('window-minimize', () => {
     mainWindow.minimize();
   });
 
-  ipcMain.handle('window-maximize', () => {
+  ipcMain.on('window-maximize', () => {
     if (mainWindow.isMaximized()) {
       mainWindow.unmaximize();
     } else {
@@ -93,7 +93,7 @@ export function registerIPCHandlers(
     }
   });
 
-  ipcMain.handle('window-close', () => {
+  ipcMain.on('window-close', () => {
     mainWindow.close();
   });
 
@@ -130,7 +130,7 @@ export function unregisterIPCHandlers(): void {
   ipcMain.removeHandler('check-work-hours');
   ipcMain.removeHandler('show-notification');
   ipcMain.removeHandler('show-reminder');
-  ipcMain.removeHandler('window-minimize');
-  ipcMain.removeHandler('window-maximize');
-  ipcMain.removeHandler('window-close');
+  ipcMain.removeListener('window-minimize', () => {});
+  ipcMain.removeListener('window-maximize', () => {});
+  ipcMain.removeListener('window-close', () => {});
 }
