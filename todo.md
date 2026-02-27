@@ -466,9 +466,70 @@ npm run typecheck    # TypeScript type check
 
 ---
 
-## Next Recommended Steps
+## ✅ Completed Features (Session 2)
 
-1. **Window Customization** - Custom title bar with themed controls
-2. **Enabled/Disabled Toggle** - Quick enable/disable from settings
-3. **Playful Animations** - Modal entrance and completion celebrations
-4. **IPC Handler Tests** - Unit tests for IPC handlers
+### 1. Enabled/Disabled Toggle ✅
+- [x] Add toggle in SettingsForm
+- [x] Disable timer when disabled
+- [x] Show disabled state with overlay
+- [x] Add status badge (Active/Paused)
+- [x] Write unit tests
+
+**Features:**
+- Green pulsing indicator when active
+- Gray indicator when paused
+- Overlay on timer showing "Reminders Paused"
+- Prevents notifications when disabled
+
+### 2. Playful Animations ✅
+- [x] Modal bounce-in entrance animation
+- [x] Confetti celebration on completion
+- [x] Pulse-glow effect when time is low (<30%)
+- [x] Add reusable animation classes
+
+**Animations:**
+- bounce-in: Elastic modal entrance
+- confetti: Colorful celebration rain
+- pulse-glow: Low time warning
+- slide-up, scale-in, wiggle: Ready for future use
+
+### 3. IPC Handler Tests ✅
+- [x] Test all settings handlers
+- [x] Test all timer handlers
+- [x] Test window control handlers
+- [x] Test event listener registration
+- [x] Test cleanup (unregisterIPCHandlers)
+
+**Coverage:** 17 tests for ipcHandlers.ts
+
+### 4. Window Customization ✅
+- [x] Frameless window configuration
+- [x] Custom title bar component
+- [x] Gradient themed header
+- [x] Window control buttons (minimize, maximize, close)
+- [x] Draggable title bar region
+- [x] IPC handlers for window controls
+
+**Features:**
+- Purple gradient title bar
+- Minimize/Maximize/Close buttons
+- Hover effects on controls
+- Draggable area for window movement
+
+---
+
+## 📊 Project Stats
+
+- **Total Tests:** 135 passing
+- **Build Status:** ✅ Successful
+- **Linux Packages:** AppImage + .deb ready
+
+---
+
+## Future Enhancements (Optional)
+
+1. **Manual Testing Checklist** - Cross-platform verification
+2. **Additional Animations** - More micro-interactions
+3. **Theme Customization** - User-selectable color schemes
+4. **Accessibility** - ARIA labels, keyboard navigation
+5. **Performance** - Bundle optimization
