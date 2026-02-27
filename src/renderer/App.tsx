@@ -102,6 +102,9 @@ function App() {
         return;
       }
       
+      // Bring window to front and stay on top
+      window.electron?.send('set-always-on-top', true);
+      
       // Trigger celebration
       setShowCelebration(true);
       
@@ -116,6 +119,11 @@ function App() {
       } catch (err) {
         console.warn('Sound playback failed:', err);
       }
+      
+      // Reset always on top after modal is closed
+      setTimeout(() => {
+        window.electron?.send('set-always-on-top', false);
+      }, 5000);
     };
 
     timerService.on('tick', handleTick);

@@ -6,6 +6,7 @@ import { registerIPCHandlers, unregisterIPCHandlers } from '../../src/main/ipcHa
 vi.mock('electron', () => ({
   ipcMain: {
     handle: vi.fn(),
+    on: vi.fn(),
     removeHandler: vi.fn(),
   },
 }));
@@ -302,6 +303,7 @@ describe('IPC Handlers', () => {
       expect(ipcMain.removeHandler).toHaveBeenCalledWith('check-work-hours');
       expect(ipcMain.removeHandler).toHaveBeenCalledWith('show-notification');
       expect(ipcMain.removeHandler).toHaveBeenCalledWith('show-reminder');
+      // Note: Window controls use ipcMain.on() which can't be easily removed
     });
   });
 });

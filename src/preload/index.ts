@@ -95,7 +95,7 @@ const electronAPI: IElectronAPI = {
     ipcRenderer.invoke('show-reminder', message),
 
   // Window controls
-  send: (channel: string) => ipcRenderer.send(channel),
+  send: (channel: string, ...args: any[]) => ipcRenderer.send(channel, ...args),
 
   // Events
   onOpenSettings: (callback: () => void) => {

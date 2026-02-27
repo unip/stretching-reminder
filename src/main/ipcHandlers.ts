@@ -97,6 +97,11 @@ export function registerIPCHandlers(
     mainWindow.close();
   });
 
+  // Always on top for notifications
+  ipcMain.on('set-always-on-top', (_event, shouldStayOnTop: boolean) => {
+    mainWindow.setAlwaysOnTop(shouldStayOnTop, 'screen-saver');
+  });
+
   // Settings change listener
   settingsStore.on('change', (settings) => {
     mainWindow.webContents.send('settings-changed', settings);
@@ -130,7 +135,6 @@ export function unregisterIPCHandlers(): void {
   ipcMain.removeHandler('check-work-hours');
   ipcMain.removeHandler('show-notification');
   ipcMain.removeHandler('show-reminder');
-  ipcMain.removeListener('window-minimize', () => {});
-  ipcMain.removeListener('window-maximize', () => {});
-  ipcMain.removeListener('window-close', () => {});
+  // Window controls use .on() so we can't easily remove them
+  // They will be cleaned up when the app quits
 }

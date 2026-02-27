@@ -39,7 +39,7 @@ export interface IElectronAPI {
   showReminder: (message?: string) => Promise<void>;
 
   // Window controls
-  send: (channel: string) => void;
+  send: (channel: string, ...args: any[]) => void;
 
   // Events
   onOpenSettings: (callback: () => void) => void;
