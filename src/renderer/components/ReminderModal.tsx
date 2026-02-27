@@ -60,7 +60,7 @@ export default function ReminderModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="card max-w-md w-full relative animate-pulse-slow">
+      <div className="card max-w-md w-full relative animate-bounce-in">
         {/* Close Button */}
         <button
           onClick={onClose}

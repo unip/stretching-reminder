@@ -31,9 +31,10 @@ export default function TimerDisplay({
 }: TimerDisplayProps) {
   // Calculate progress percentage (0-100)
   const progress = interval ? (remainingTime / interval) * 100 : 0;
+  const isLowTime = progress < 30 && progress > 0;
 
   return (
-    <div className="text-center card">
+    <div className={`text-center card ${isLowTime ? 'animate-pulse-glow' : ''}`}>
       <div className="mb-6">
         {isPaused && (
           <div

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import TimerDisplay from './components/TimerDisplay';
 import ReminderModal from './components/ReminderModal';
 import SettingsPage from './pages/SettingsPage';
+import Confetti from './components/Confetti';
 import { createSettingsStore } from './store/settingsStore';
 import { TimerService } from '../main/timer';
 import { SoundService } from './services/soundService';
@@ -23,6 +24,7 @@ function App() {
   const [settings, setSettings] = useState(settingsStore.getState());
   const [isTimerStarted, setIsTimerStarted] = useState(false);
   const [isWithinWorkHours, setIsWithinWorkHours] = useState(true);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   // Subscribe to settings changes
   useEffect(() => {
@@ -93,6 +95,15 @@ function App() {
       }
     };
     const handleComplete = () => {
+      // Don't show reminder if disabled
+      if (!settings.enabled) {
+        console.log('Reminders disabled, skipping notification');
+        return;
+      }
+      
+      // Trigger celebration
+      setShowCelebration(true);
+      
       // Get a random exercise
       const randomExercise = getRandomExercise();
       setCurrentExercise(randomExercise);
@@ -182,8 +193,25 @@ function App() {
               <h1 className="text-2xl font-bold text-primary-600 dark:text-primary-400">
                 🧘 Stretching Reminder
               </h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                {isWithinWorkHours ? (settings.enabled ? 'Active' : 'Paused') : 'Outside work hours'} • Next break in {Math.ceil(remainingTime / 60000)} min
+              <div className="flex items-center gap-2 mt-1">
+                <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                  settings.enabled 
+                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
+                    : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+                }`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${
+                    settings.enabled ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
+                  }`} />
+                  {settings.enabled ? 'Active' : 'Paused'}
+                </span>
+                {!isWithinWorkHours && (
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    • Outside work hours
+                  </span>
+                )}
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                Next break in {Math.ceil(remainingTime / 60000)} min
               </p>
             </div>
             <button
@@ -196,7 +224,20 @@ function App() {
 
           {/* Timer or Start Button */}
           {!isTimerRunning ? (
-            <div className="card text-center py-12">
+            <div className="card text-center py-12 relative">
+              {!settings.enabled && (
+                <div className="absolute inset-0 bg-gray-100 dark:bg-gray-800 bg-opacity-80 dark:bg-opacity-80 rounded-lg flex items-center justify-center z-10">
+                  <div className="text-center p-6">
+                    <div className="text-4xl mb-3">⏸️</div>
+                    <p className="text-gray-700 dark:text-gray-300 font-medium mb-2">
+                      Reminders Paused
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Enable in Settings to receive notifications
+                    </p>
+                  </div>
+                </div>
+              )}
               <div className="text-6xl mb-4">⏰</div>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
                 Ready to start your focus timer?
@@ -206,14 +247,29 @@ function App() {
               </button>
             </div>
           ) : (
-            <TimerDisplay
-              remainingTime={remainingTime}
-              interval={timerService.getInterval()}
-              isPaused={isPaused}
-              onPause={handlePause}
-              onResume={handleResume}
-              onReset={handleReset}
-            />
+            <div className="relative">
+              <TimerDisplay
+                remainingTime={remainingTime}
+                interval={timerService.getInterval()}
+                isPaused={isPaused}
+                onPause={handlePause}
+                onResume={handleResume}
+                onReset={handleReset}
+              />
+              {!settings.enabled && (
+                <div className="absolute inset-0 bg-gray-100 dark:bg-gray-800 bg-opacity-80 dark:bg-opacity-80 rounded-lg flex items-center justify-center z-10">
+                  <div className="text-center p-6">
+                    <div className="text-4xl mb-3">⏸️</div>
+                    <p className="text-gray-700 dark:text-gray-300 font-medium mb-2">
+                      Reminders Paused
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Enable in Settings to receive notifications
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
 
           {/* Quick Info */}
@@ -234,6 +290,12 @@ function App() {
         onSnooze={handleSnooze}
         onSkip={handleSkip}
         onClose={handleCloseReminder}
+      />
+
+      {/* Celebration Confetti */}
+      <Confetti
+        isActive={showCelebration}
+        onComplete={() => setShowCelebration(false)}
       />
     </div>
   );
