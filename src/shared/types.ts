@@ -12,7 +12,7 @@ export interface Settings {
 export interface IElectronAPI {
   // App
   getVersion: () => Promise<string>;
-  
+
   // Settings
   getSettings: () => Promise<Settings>;
   setInterval: (minutes: number) => Promise<void>;
@@ -21,7 +21,7 @@ export interface IElectronAPI {
   toggleDarkMode: () => Promise<void>;
   setCustomMessage: (message: string) => Promise<void>;
   onSettingsChanged: (callback: (settings: Settings) => void) => void;
-  
+
   // Timer
   startTimer: () => Promise<void>;
   pauseTimer: () => Promise<void>;
@@ -33,13 +33,16 @@ export interface IElectronAPI {
   onTimerComplete: (callback: () => void) => void;
   onWorkHoursChanged: (callback: (state: { isWithinWorkHours: boolean }) => void) => void;
   onNotificationAction: (callback: (action: 'snooze' | 'skip') => void) => void;
-  
+
   // Notifications
   showNotification: (title: string, body: string) => Promise<void>;
   showReminder: (message?: string) => Promise<void>;
 
   // Window controls
   send: (channel: string, ...args: any[]) => void;
+
+  // Generic event listener
+  on: (channel: string, callback: (...args: any[]) => void) => void;
 
   // Events
   onOpenSettings: (callback: () => void) => void;

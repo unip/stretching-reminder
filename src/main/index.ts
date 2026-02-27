@@ -7,11 +7,6 @@ import { TrayService } from './trayService';
 import { AutoLaunchService } from './autoLaunchService';
 import { registerIPCHandlers, unregisterIPCHandlers } from './ipcHandlers';
 
-console.log('=== Main process starting ===');
-console.log('Node version:', process.version);
-console.log('Electron version:', process.versions.electron);
-console.log('Chrome version:', process.versions.chrome);
-
 let mainWindow: BrowserWindow | null = null;
 let settingsStore: SettingsStore | null = null;
 let notificationService: NotificationService | null = null;
@@ -170,12 +165,13 @@ function initializeServices() {
 }
 
 app.whenReady().then(() => {
-  console.log('=== app.whenReady() resolved ===');
   createWindow();
   initializeServices();
+  
   if (mainWindow && settingsStore && notificationService && timerService && autoLaunchService) {
     registerIPCHandlers(mainWindow, settingsStore, notificationService, timerService, autoLaunchService);
   }
+  
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();

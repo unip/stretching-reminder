@@ -14,20 +14,20 @@ export default defineConfig({
     outDir: 'dist/main',
     emptyOutDir: true,
     rollupOptions: {
-      external: ['electron', 'electron-store', 'events', 'path', 'url'],
+      // Only externalize electron-specific modules
+      external: ['electron'],
       output: {
         format: 'cjs',
       },
     },
     minify: false,
     sourcemap: true,
+    target: 'node18',
+    ssr: true, // Enable SSR mode for proper Node.js module handling
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
-  },
-  ssr: {
-    noExternal: true,
   },
 });

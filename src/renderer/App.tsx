@@ -64,7 +64,7 @@ function App() {
     const unsubscribe = () => {
       window.electron?.onWorkHoursChanged(() => {});
     };
-    
+
     window.electron?.onWorkHoursChanged((state) => {
       setIsWithinWorkHours(state.isWithinWorkHours);
     });

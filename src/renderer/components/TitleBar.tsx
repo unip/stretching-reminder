@@ -1,17 +1,14 @@
 export default function TitleBar() {
   const handleMinimize = () => {
     window.electron?.send('window-minimize');
-    console.log('Window minimize sent');
   };
 
   const handleMaximize = () => {
     window.electron?.send('window-maximize');
-    console.log('Window maximize sent');
   };
 
   const handleClose = () => {
     window.electron?.send('window-close');
-    console.log('Window close sent');
   };
 
   return (

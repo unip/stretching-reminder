@@ -43,7 +43,10 @@ export interface IElectronAPI {
   showReminder: (message?: string) => Promise<void>;
 
   // Window controls
-  send: (channel: string) => void;
+  send: (channel: string, ...args: any[]) => void;
+
+  // Generic event listener
+  on: (channel: string, callback: (...args: any[]) => void) => void;
 
   // Events
   onOpenSettings: (callback: () => void) => void;
@@ -98,6 +101,9 @@ const electronAPI: IElectronAPI = {
   send: (channel: string, ...args: any[]) => ipcRenderer.send(channel, ...args),
 
   // Events
+  on: (channel: string, callback: (...args: any[]) => void) => {
+    ipcRenderer.on(channel, (_, ...args) => callback(...args));
+  },
   onOpenSettings: (callback: () => void) => {
     ipcRenderer.on('open-settings', () => callback());
   },
