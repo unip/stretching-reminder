@@ -28,7 +28,7 @@ function createWindow() {
   console.log('Creating window...');
   console.log('App path:', app.getAppPath());
   console.log('__dirname:', __dirname);
-  
+
   mainWindow = new BrowserWindow({
     width: 450,
     height: 700,
@@ -36,6 +36,9 @@ function createWindow() {
     minWidth: 400,
     minHeight: 600,
     show: false,
+    frame: false, // Custom title bar
+    transparent: false,
+    backgroundColor: '#ffffff',
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.cjs'),
       contextIsolation: true,

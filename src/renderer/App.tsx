@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import TimerDisplay from './components/TimerDisplay';
 import ReminderModal from './components/ReminderModal';
 import SettingsPage from './pages/SettingsPage';
+import TitleBar from './components/TitleBar';
 import Confetti from './components/Confetti';
 import { createSettingsStore } from './store/settingsStore';
 import { TimerService } from '../main/timer';
@@ -185,6 +186,9 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-accent-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+      {/* Custom Title Bar */}
+      <TitleBar />
+
       {currentView === 'timer' ? (
         <div className="container mx-auto px-4 py-8 max-w-md">
           {/* Header */}

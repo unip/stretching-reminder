@@ -37,7 +37,10 @@ export interface IElectronAPI {
   // Notifications
   showNotification: (title: string, body: string) => Promise<void>;
   showReminder: (message?: string) => Promise<void>;
-  
+
+  // Window controls
+  send: (channel: string) => void;
+
   // Events
   onOpenSettings: (callback: () => void) => void;
 }

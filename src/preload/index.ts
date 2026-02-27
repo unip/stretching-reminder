@@ -41,7 +41,10 @@ export interface IElectronAPI {
   // Notifications
   showNotification: (title: string, body: string) => Promise<void>;
   showReminder: (message?: string) => Promise<void>;
-  
+
+  // Window controls
+  send: (channel: string) => void;
+
   // Events
   onOpenSettings: (callback: () => void) => void;
 }
@@ -90,7 +93,10 @@ const electronAPI: IElectronAPI = {
     ipcRenderer.invoke('show-notification', title, body),
   showReminder: (message?: string) =>
     ipcRenderer.invoke('show-reminder', message),
-  
+
+  // Window controls
+  send: (channel: string) => ipcRenderer.send(channel),
+
   // Events
   onOpenSettings: (callback: () => void) => {
     ipcRenderer.on('open-settings', () => callback());

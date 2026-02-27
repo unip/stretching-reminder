@@ -75,9 +75,26 @@ export function registerIPCHandlers(
   ipcMain.handle('show-notification', (_, title: string, body: string) => {
     notificationService.show(title, body);
   });
-  
+
   ipcMain.handle('show-reminder', (_, message?: string) => {
     notificationService.showReminder(message);
+  });
+
+  // Window control handlers
+  ipcMain.handle('window-minimize', () => {
+    mainWindow.minimize();
+  });
+
+  ipcMain.handle('window-maximize', () => {
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize();
+    } else {
+      mainWindow.maximize();
+    }
+  });
+
+  ipcMain.handle('window-close', () => {
+    mainWindow.close();
   });
 
   // Settings change listener
@@ -113,4 +130,7 @@ export function unregisterIPCHandlers(): void {
   ipcMain.removeHandler('check-work-hours');
   ipcMain.removeHandler('show-notification');
   ipcMain.removeHandler('show-reminder');
+  ipcMain.removeHandler('window-minimize');
+  ipcMain.removeHandler('window-maximize');
+  ipcMain.removeHandler('window-close');
 }

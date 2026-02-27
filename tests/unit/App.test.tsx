@@ -56,7 +56,7 @@ describe('App - Enabled/Disabled Toggle', () => {
     // This test needs the mock to return enabled: false
     // Due to vi.mock limitations, we'll test the component differently
     render(<App />);
-    // For now, just verify the component renders
-    expect(screen.getByText(/Stretching Reminder/i)).toBeInTheDocument();
+    // For now, just verify the component renders with title bar
+    expect(screen.getAllByText(/Stretching Reminder/i).length).toBeGreaterThan(0);
   });
 });
